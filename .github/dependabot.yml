@@ -8,6 +8,9 @@ updates:
     groups:
       frontend:
         patterns: ["*"]
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: nuget
     directory: /backend
@@ -17,6 +20,9 @@ updates:
     groups:
       backend:
         patterns: ["*"]
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
     directory: /
