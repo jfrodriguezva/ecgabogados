@@ -150,6 +150,19 @@ BEGIN
 END
 GO
 
+IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.Citas') AND name = 'Email')
+    ALTER TABLE dbo.Citas ADD Email NVARCHAR(256) NULL;
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.Citas') AND name = 'Servicio')
+    ALTER TABLE dbo.Citas ADD Servicio NVARCHAR(150) NOT NULL DEFAULT N'Asesoría jurídica';
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.Citas') AND name = 'Modalidad')
+    ALTER TABLE dbo.Citas ADD Modalidad NVARCHAR(50) NOT NULL DEFAULT N'En línea';
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.Citas') AND name = 'Comentario')
+    ALTER TABLE dbo.Citas ADD Comentario NVARCHAR(1000) NULL;
+GO
+
 -- Enlace mágico del portal de cliente
 IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.Casos') AND name = 'TokenAcceso')
 BEGIN
@@ -160,6 +173,42 @@ GO
 IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.Casos') AND name = 'TokenGeneradoEn')
 BEGIN
     ALTER TABLE dbo.Casos ADD TokenGeneradoEn DATETIME2 NULL;
+END
+GO
+
+IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.Casos') AND name = 'ClienteUsuarioId')
+    ALTER TABLE dbo.Casos ADD ClienteUsuarioId INT NULL REFERENCES dbo.Usuarios(Id);
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.Casos') AND name = 'Etapa')
+    ALTER TABLE dbo.Casos ADD Etapa NVARCHAR(100) NOT NULL DEFAULT N'Valoración';
+GO
+
+IF OBJECT_ID(N'dbo.MensajesExpediente', N'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.MensajesExpediente (
+        Id INT IDENTITY PRIMARY KEY,
+        CasoId INT NOT NULL REFERENCES dbo.Casos(Id),
+        UsuarioId INT NOT NULL REFERENCES dbo.Usuarios(Id),
+        AutorNombre NVARCHAR(200) NOT NULL,
+        AutorRol NVARCHAR(50) NOT NULL,
+        Mensaje NVARCHAR(2000) NOT NULL,
+        FechaEnvio DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+    );
+    CREATE INDEX IX_MensajesExpediente_CasoId_Fecha ON dbo.MensajesExpediente(CasoId, FechaEnvio);
+END
+GO
+
+IF OBJECT_ID(N'dbo.Tarifas', N'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.Tarifas (
+        Id INT IDENTITY PRIMARY KEY,
+        Area NVARCHAR(80) NOT NULL,
+        Servicio NVARCHAR(150) NOT NULL,
+        Concepto NVARCHAR(200) NOT NULL,
+        MontoBase DECIMAL(10,2) NOT NULL,
+        Activa BIT NOT NULL DEFAULT 1
+    );
+    CREATE INDEX IX_Tarifas_Area_Servicio ON dbo.Tarifas(Area, Servicio);
 END
 GO
 

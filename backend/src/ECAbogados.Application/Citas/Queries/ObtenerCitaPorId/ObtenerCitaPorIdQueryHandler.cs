@@ -13,6 +13,6 @@ public class ObtenerCitaPorIdQueryHandler(ICitaRepository citaRepository)
 
         return cita is null
             ? null
-            : new CitaDto(cita.Id, cita.CasoId, cita.NombreCliente, cita.Telefono, cita.FechaHora, cita.Estatus);
+            : new CitaDto(cita.Id, cita.CasoId, cita.NombreCliente, cita.Telefono, cita.Email, cita.Servicio, cita.Modalidad, cita.Comentario, cita.FechaHora, cita.Estatus);
     }
 }

@@ -91,6 +91,96 @@ export const SERVICIOS: ServicioContenido[] = [
       { numero: "03", titulo: "Resolución", texto: "Te acompañamos en el proceso legal hasta su conclusión." },
     ],
   },
+  {
+    slug: "divorcio-mutuo-consentimiento",
+    tipo: "Divorcio por mutuo consentimiento",
+    frase: "Acuerdos claros para una nueva etapa",
+    titulo: "Divorcio por mutuo consentimiento",
+    descripcion: "Cuando ambas partes están de acuerdo, preparamos el convenio y acompañamos la formalización del divorcio, incluyendo las medidas familiares que correspondan.",
+    beneficios: [
+      { icono: "document", titulo: "Convenio integral", texto: "Ordenamos los acuerdos sobre hijas, hijos, bienes y obligaciones." },
+      { icono: "scale", titulo: "Decisiones informadas", texto: "Explicamos el alcance jurídico antes de firmar." },
+      { icono: "clock", titulo: "Coordinación", texto: "Damos seguimiento a requisitos, fechas y actuaciones." },
+      { icono: "handHeart", titulo: "Trato respetuoso", texto: "Favorecemos una comunicación ordenada durante el proceso." },
+    ],
+    proceso: [
+      { numero: "01", titulo: "Valoración", texto: "Identificamos los acuerdos y documentos necesarios." },
+      { numero: "02", titulo: "Convenio", texto: "Preparamos y revisamos la propuesta con ambas partes." },
+      { numero: "03", titulo: "Formalización", texto: "Presentamos y acompañamos el procedimiento hasta su resolución." },
+    ],
+  },
+  {
+    slug: "sucesiones-herencias",
+    tipo: "Sucesiones y herencias",
+    frase: "Certeza para proteger el patrimonio familiar",
+    titulo: "Sucesiones y herencias",
+    descripcion: "Asesoría y representación en juicios testamentarios e intestamentarios, desde la identificación de herederos hasta la adjudicación.",
+    beneficios: [
+      { icono: "document", titulo: "Revisión documental", texto: "Identificamos testamento, actas y bienes necesarios." },
+      { icono: "family", titulo: "Orientación a herederos", texto: "Explicamos derechos y responsabilidades con claridad." },
+      { icono: "scale", titulo: "Representación legal", texto: "Acompañamos las etapas judiciales o notariales aplicables." },
+      { icono: "lock", titulo: "Información protegida", texto: "Tratamos datos familiares y patrimoniales con reserva." },
+    ],
+    proceso: [
+      { numero: "01", titulo: "Diagnóstico", texto: "Revisamos parentesco, testamento y patrimonio." },
+      { numero: "02", titulo: "Procedimiento", texto: "Definimos y promovemos la vía legal aplicable." },
+      { numero: "03", titulo: "Adjudicación", texto: "Damos seguimiento hasta formalizar la transmisión de bienes." },
+    ],
+  },
+  {
+    slug: "cobranzas-pagares",
+    tipo: "Cobranzas y pagarés",
+    frase: "Recupera lo que legalmente te corresponde",
+    titulo: "Cobranzas y pagarés",
+    descripcion: "Evaluamos documentos y viabilidad para recuperar adeudos mediante negociación o juicio mercantil.",
+    beneficios: [
+      { icono: "document", titulo: "Análisis del adeudo", texto: "Revisamos pagarés, contratos y evidencia disponible." },
+      { icono: "scale", titulo: "Estrategia proporcional", texto: "Comparamos negociación y vía judicial antes de actuar." },
+      { icono: "clock", titulo: "Atención a plazos", texto: "Identificamos fechas relevantes para preservar acciones." },
+      { icono: "gavel", titulo: "Seguimiento", texto: "Informamos avances y próximos pasos del asunto." },
+    ],
+    proceso: [
+      { numero: "01", titulo: "Revisión", texto: "Determinamos soporte documental, monto y viabilidad." },
+      { numero: "02", titulo: "Requerimiento", texto: "Buscamos una solución documentada cuando resulte conveniente." },
+      { numero: "03", titulo: "Acción legal", texto: "Promovemos y damos seguimiento a la vía acordada." },
+    ],
+  },
+  {
+    slug: "contratos",
+    tipo: "Contratos",
+    frase: "Acuerdos claros, riesgos bajo control",
+    titulo: "Contratos",
+    descripcion: "Elaboración, revisión y modificación de contratos para personas, emprendedores y empresas.",
+    beneficios: [
+      { icono: "document", titulo: "Redacción a medida", texto: "El contrato responde a la operación real, no a una plantilla genérica." },
+      { icono: "lock", titulo: "Prevención", texto: "Detectamos obligaciones, penalizaciones y vacíos relevantes." },
+      { icono: "scale", titulo: "Equilibrio jurídico", texto: "Explicamos riesgos y alternativas antes de firmar." },
+      { icono: "handHeart", titulo: "Lenguaje claro", texto: "Traducimos las cláusulas a decisiones comprensibles." },
+    ],
+    proceso: [
+      { numero: "01", titulo: "Necesidad", texto: "Conocemos la operación y los objetivos del acuerdo." },
+      { numero: "02", titulo: "Proyecto", texto: "Redactamos o revisamos cláusulas y observaciones." },
+      { numero: "03", titulo: "Cierre", texto: "Ajustamos la versión final para firma." },
+    ],
+  },
+  {
+    slug: "asesoria-empresas",
+    tipo: "Asesoría para empresas",
+    frase: "Decisiones empresariales con respaldo legal",
+    titulo: "Asesoría legal para empresas y emprendedores",
+    descripcion: "Apoyo en contratos, prevención de riesgos y asuntos corporativos para construir operaciones más ordenadas.",
+    beneficios: [
+      { icono: "document", titulo: "Contratos", texto: "Documentamos relaciones con clientes, proveedores y colaboradores." },
+      { icono: "gavel", titulo: "Prevención de riesgos", texto: "Identificamos contingencias antes de que escalen." },
+      { icono: "scale", titulo: "Asuntos corporativos", texto: "Orientamos decisiones y documentación societaria." },
+      { icono: "clock", titulo: "Acompañamiento", texto: "Mantenemos seguimiento por asunto y fechas clave." },
+    ],
+    proceso: [
+      { numero: "01", titulo: "Diagnóstico", texto: "Conocemos la empresa, operación y prioridades." },
+      { numero: "02", titulo: "Plan legal", texto: "Priorizamos documentos, riesgos y acciones." },
+      { numero: "03", titulo: "Seguimiento", texto: "Implementamos y actualizamos las soluciones acordadas." },
+    ],
+  },
 ];
 
 export function getServicioPorSlug(slug: string): ServicioContenido | undefined {

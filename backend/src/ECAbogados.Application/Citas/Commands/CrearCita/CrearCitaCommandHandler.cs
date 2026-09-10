@@ -17,6 +17,10 @@ public class CrearCitaCommandHandler(
             CasoId = request.CasoId,
             NombreCliente = request.NombreCliente,
             Telefono = request.Telefono,
+            Email = request.Email,
+            Servicio = request.Servicio,
+            Modalidad = request.Modalidad,
+            Comentario = request.Comentario,
             FechaHora = request.FechaHora,
             Estatus = EstatusCita.Pendiente
         };
@@ -25,7 +29,7 @@ public class CrearCitaCommandHandler(
 
         await staffNotifier.NotifyAsync(
             "Nueva solicitud de cita",
-            $"{request.NombreCliente} ({request.Telefono}) solicitó una cita para el {request.FechaHora:dd/MM/yyyy HH:mm}.",
+            $"{request.NombreCliente} ({request.Telefono}) solicitó {request.Modalidad} para {request.Servicio}, el {request.FechaHora:dd/MM/yyyy HH:mm}.",
             cancellationToken);
 
         if (request.CasoId is int casoId)

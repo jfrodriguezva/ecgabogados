@@ -15,6 +15,8 @@ const NAV = [
 ];
 
 const NAV_ADMIN = { href: "/usuarios", label: "Usuarios", icon: IconUser };
+const NAV_TARIFAS = { href: "/tarifas", label: "Tarifas", icon: IconFolder };
+const NAV_CLIENTES = { href: "/clientes", label: "Clientes", icon: IconUser };
 
 export default function Sidebar({
   open = false,
@@ -38,7 +40,7 @@ export default function Sidebar({
     }
   }, []);
 
-  const items = isAdmin ? [...NAV, NAV_ADMIN] : NAV;
+  const items = isAdmin ? [...NAV, NAV_CLIENTES, NAV_TARIFAS, NAV_ADMIN] : NAV;
 
   function handleLogout() {
     deleteCookie("ec_token");

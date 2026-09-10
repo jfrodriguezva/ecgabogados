@@ -7,5 +7,9 @@ public record CitaDto(
     int? CasoId,
     string NombreCliente,
     string Telefono,
+    string? Email,
+    string Servicio,
+    string Modalidad,
+    string? Comentario,
     DateTime FechaHora,
     EstatusCita Estatus);

@@ -63,10 +63,15 @@ function TabButton({
 function AgendaForm() {
   const [nombreCliente, setNombreCliente] = useState("");
   const [telefono, setTelefono] = useState("");
+  const [email, setEmail] = useState("");
+  const [servicio, setServicio] = useState("Divorcio incausado");
+  const [modalidad, setModalidad] = useState("Videollamada");
+  const [comentario, setComentario] = useState("");
   const [fechaHora, setFechaHora] = useState("");
   const [saving, setSaving] = useState(false);
   const [enviado, setEnviado] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [whatsappUrl, setWhatsappUrl] = useState("");
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -76,12 +81,20 @@ function AgendaForm() {
       await createCita({
         nombreCliente,
         telefono,
+        email: email || null,
+        servicio,
+        modalidad,
+        comentario: comentario || null,
         fechaHora: new Date(fechaHora).toISOString(),
         casoId: null,
       });
+      const aviso = "Hola, soy " + nombreCliente + ". Envié una solicitud de cita para " + servicio + " el " + new Date(fechaHora).toLocaleString("es-MX") + " en modalidad " + modalidad + ".";
+      setWhatsappUrl("https://wa.me/522205801140?text=" + encodeURIComponent(aviso));
       setEnviado(true);
       setNombreCliente("");
       setTelefono("");
+      setEmail("");
+      setComentario("");
       setFechaHora("");
     } catch {
       setError("No se pudo enviar tu solicitud. Intenta de nuevo o contáctanos por WhatsApp.");
@@ -91,7 +104,7 @@ function AgendaForm() {
   }
 
   if (enviado) {
-    return <SuccessNote text="Hemos recibido tu solicitud. Nos pondremos en contacto contigo para confirmar tu asesoría." onReset={() => setEnviado(false)} />;
+    return <SuccessNote text="Hemos recibido tu solicitud. La fecha aún no está confirmada. Puedes avisar ahora a la abogada por WhatsApp." onReset={() => setEnviado(false)} whatsappUrl={whatsappUrl} />;
   }
 
   return (
@@ -112,6 +125,21 @@ function AgendaForm() {
           className={inputClass}
         />
       </Field>
+      <Field label="Correo electrónico">
+        <input required type="email" value={email} onChange={(e) => setEmail(e.target.value)} className={inputClass} />
+      </Field>
+      <Field label="Servicio">
+        <select value={servicio} onChange={(e) => setServicio(e.target.value)} className={inputClass}>
+          {["Divorcio incausado","Pensión alimenticia","Guarda y custodia","Régimen de convivencias","Divorcio por mutuo consentimiento","Sucesiones y herencias","Cobranzas y pagarés","Contratos","Trámites ante el SAT","Asesoría para empresas"].map((item) => <option className="bg-brand-ink" key={item}>{item}</option>)}
+        </select>
+      </Field>
+      <Field label="Modalidad preferida">
+        <select value={modalidad} onChange={(e) => setModalidad(e.target.value)} className={inputClass}>
+          <option className="bg-brand-ink">Videollamada</option>
+          <option className="bg-brand-ink">Llamada telefónica</option>
+          <option className="bg-brand-ink">Presencial por confirmar</option>
+        </select>
+      </Field>
       <Field label="Fecha y hora preferida">
         <input
           required
@@ -121,6 +149,10 @@ function AgendaForm() {
           className={inputClass}
         />
       </Field>
+      <Field label="Cuéntanos brevemente qué necesitas (opcional)">
+        <textarea rows={3} value={comentario} onChange={(e) => setComentario(e.target.value)} className={inputClass + " resize-none"} />
+      </Field>
+      <p className="text-xs leading-relaxed text-brand-creamSoft">Esta es una solicitud. La fecha, horario y modalidad quedarán confirmados cuando la Lic. Erika Cruz García se comunique contigo.</p>
 
       {error && <ErrorNote text={error} />}
 
@@ -243,11 +275,12 @@ function SubmitButton({
   );
 }
 
-function SuccessNote({ text, onReset }: { text: string; onReset: () => void }) {
+function SuccessNote({ text, onReset, whatsappUrl }: { text: string; onReset: () => void; whatsappUrl?: string }) {
   return (
     <div className="flex flex-col items-start gap-3 border border-brand-gold/50 bg-brand-gold/10 px-5 py-6">
       <IconCheck className="h-6 w-6 text-brand-gold" />
       <p className="text-sm text-brand-cream">{text}</p>
+      {whatsappUrl && <a href={whatsappUrl} target="_blank" rel="noreferrer" className="bg-brand-gold px-4 py-2 text-xs font-semibold uppercase tracking-widest text-brand-ink">Avisar por WhatsApp</a>}
       <button
         type="button"
         onClick={onReset}

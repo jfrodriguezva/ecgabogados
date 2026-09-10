@@ -96,6 +96,8 @@ export default function AgendaPage() {
       await createCita({
         nombreCliente,
         telefono,
+        servicio: "Asesoría jurídica",
+        modalidad: "Presencial por confirmar",
         fechaHora: new Date(fechaHora).toISOString(),
         casoId: casoId ? Number(casoId) : null,
       });

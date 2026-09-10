@@ -22,7 +22,7 @@ export default function LoginPage() {
       const res = await login(email, password);
       setCookie("ec_token", res.token);
       setCookie("ec_user", JSON.stringify({ nombre: res.nombre, rol: res.rol, email: res.email }));
-      router.push("/dashboard");
+      router.push(res.rol === "Cliente" ? "/mi-portal" : "/dashboard");
     } catch (err) {
       if (err instanceof ApiError && err.status === 401) {
         setError("Correo o contraseña incorrectos.");

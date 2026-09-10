@@ -20,9 +20,11 @@ public static class DependencyInjection
         services.AddScoped<IDocumentoRepository, DocumentoRepository>();
         services.AddScoped<IUsuarioRepository, UsuarioRepository>();
         services.AddScoped<IMensajeContactoRepository, MensajeContactoRepository>();
+        services.AddScoped<IMensajeExpedienteRepository, MensajeExpedienteRepository>();
         services.AddScoped<IChecklistItemRepository, ChecklistItemRepository>();
         services.AddScoped<IPlazoRepository, PlazoRepository>();
         services.AddScoped<IPagoRepository, PagoRepository>();
+        services.AddScoped<ITarifaRepository, TarifaRepository>();
         services.AddScoped<IAuditoriaRepository, AuditoriaRepository>();
 
         services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();

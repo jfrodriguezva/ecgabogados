@@ -12,10 +12,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ECAbogados.Api.Controllers;
 
-[Authorize]
+[Authorize(Roles = "Administrador,Abogado,Asistente")]
 [ApiController]
 [Route("api/[controller]")]
-public class CasosController(ISender sender) : ControllerBase
+public class CasosController(ISender sender, ECAbogados.Application.Interfaces.ICasoRepository casoRepository) : ControllerBase
 {
     [HttpGet]
     public async Task<IActionResult> Listar()
@@ -79,6 +79,16 @@ public class CasosController(ISender sender) : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Roles = "Administrador,Abogado")]
+    [HttpPatch("{id:int}/cliente-etapa")]
+    public async Task<IActionResult> AsignarClienteYEtapa(int id, [FromBody] AsignarClienteEtapaRequest request)
+    {
+        var caso = await casoRepository.GetByIdAsync(id);
+        if (caso is null) return NotFound();
+        await casoRepository.AsignarClienteYEtapaAsync(id, request.ClienteUsuarioId, request.Etapa);
+        return NoContent();
+    }
+
     // Invalida el enlace anterior del portal del cliente y genera uno nuevo.
     [Authorize(Roles = "Administrador")]
     [HttpPost("{id:int}/regenerar-token")]
@@ -94,3 +104,4 @@ public record ActualizarCasoRequest(string ClienteNombre, string Tipo, string? N
 public record CambiarEstatusCasoRequest(EstatusCaso Estatus);
 
 public record MarcarChecklistItemRequest(bool Completado);
+public record AsignarClienteEtapaRequest(int? ClienteUsuarioId, string Etapa);

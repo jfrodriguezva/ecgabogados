@@ -25,7 +25,7 @@ public class ObtenerCasoPorIdQueryHandler(
 
         var citasDelCaso = citas
             .Where(c => c.CasoId == request.Id)
-            .Select(c => new CitaDto(c.Id, c.CasoId, c.NombreCliente, c.Telefono, c.FechaHora, c.Estatus))
+            .Select(c => new CitaDto(c.Id, c.CasoId, c.NombreCliente, c.Telefono, c.Email, c.Servicio, c.Modalidad, c.Comentario, c.FechaHora, c.Estatus))
             .ToList();
 
         var documentosDelCaso = documentos

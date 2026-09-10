@@ -12,7 +12,7 @@ public class ListarCitasQueryHandler(ICitaRepository citaRepository)
         var citas = await citaRepository.GetAllAsync();
 
         return citas
-            .Select(c => new CitaDto(c.Id, c.CasoId, c.NombreCliente, c.Telefono, c.FechaHora, c.Estatus))
+            .Select(c => new CitaDto(c.Id, c.CasoId, c.NombreCliente, c.Telefono, c.Email, c.Servicio, c.Modalidad, c.Comentario, c.FechaHora, c.Estatus))
             .ToList();
     }
 }

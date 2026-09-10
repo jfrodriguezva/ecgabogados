@@ -46,6 +46,24 @@ export interface Usuario {
   activo: boolean;
 }
 
+export interface Tarifa {
+  id: number;
+  area: string;
+  servicio: string;
+  concepto: string;
+  montoBase: number;
+  activa: boolean;
+}
+
+export interface MensajeExpediente {
+  id: number;
+  casoId: number;
+  autorNombre: string;
+  autorRol: string;
+  mensaje: string;
+  fechaEnvio: string;
+}
+
 export interface CasoDetalle extends Caso {
   tokenAcceso: string | null;
   tokenGeneradoEn: string | null;
@@ -77,6 +95,10 @@ export interface Cita {
   casoId: number | null;
   nombreCliente: string;
   telefono: string;
+  email: string | null;
+  servicio: string;
+  modalidad: string;
+  comentario: string | null;
   fechaHora: string;
   estatus: EstatusCita;
 }
@@ -95,6 +117,20 @@ export interface LoginResponse {
   nombre: string;
   email: string;
   rol: string;
+}
+
+export interface MiCaso {
+  id: number;
+  clienteNombre: string;
+  tipo: string;
+  estatus: EstatusCaso;
+  etapa: string;
+  fechaApertura: string;
+  checklist: ChecklistItem[];
+  documentos: Documento[];
+  fechas: { id: number; descripcion: string; fechaLimite: string; cumplido: boolean }[];
+  pagos: Pago[];
+  totalPagado: number;
 }
 
 export interface MensajeContacto {
@@ -163,6 +199,35 @@ export function login(email: string, password: string) {
   });
 }
 
+export function getMisCasos() {
+  return request<MiCaso[]>("/api/mi-portal/casos");
+}
+
+export function getTarifas() {
+  return request<Tarifa[]>("/api/tarifas");
+}
+
+export function createTarifa(data: Omit<Tarifa, "id">) {
+  return request<{id:number}>("/api/tarifas", { method: "POST", body: JSON.stringify(data) });
+}
+
+export function createCliente(data: {nombre:string; email:string; passwordTemporal:string; casoId:number}) {
+  return request<{id:number}>("/api/clientes", { method: "POST", body: JSON.stringify(data) });
+}
+
+export function getMensajesCaso(casoId:number) {
+  return request<MensajeExpediente[]>("/api/casos/" + casoId + "/mensajes");
+}
+
+export function enviarMensajeCaso(casoId:number, mensaje:string) {
+  return request<{id:number}>("/api/casos/" + casoId + "/mensajes", {method:"POST", body:JSON.stringify({mensaje})});
+}
+
+export function subirDocumentoCliente(casoId:number, file:File) {
+  const data=new FormData(); data.append("file",file);
+  return request<{id:number}>("/api/mi-portal/casos/"+casoId+"/documentos",{method:"POST",body:data});
+}
+
 // ---- Casos ----
 
 export function getCasos() {
@@ -217,6 +282,10 @@ export function createCita(data: {
   casoId?: number | null;
   nombreCliente: string;
   telefono: string;
+  email?: string | null;
+  servicio: string;
+  modalidad: string;
+  comentario?: string | null;
   fechaHora: string;
 }) {
   return request<{ id: number }>("/api/citas", {

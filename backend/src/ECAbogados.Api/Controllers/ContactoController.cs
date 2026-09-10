@@ -21,7 +21,7 @@ public class ContactoController(ISender sender) : ControllerBase
         return Created(string.Empty, new { id });
     }
 
-    [Authorize]
+    [Authorize(Roles = "Administrador,Abogado,Asistente")]
     [HttpGet]
     public async Task<IActionResult> Listar()
     {
@@ -29,7 +29,7 @@ public class ContactoController(ISender sender) : ControllerBase
         return Ok(mensajes);
     }
 
-    [Authorize]
+    [Authorize(Roles = "Administrador,Abogado,Asistente")]
     [HttpPatch("{id:int}/atendido")]
     public async Task<IActionResult> MarcarAtendido(int id)
     {

@@ -15,6 +15,8 @@ public class Caso
     public EstatusCaso Estatus { get; set; }
     public DateTime FechaApertura { get; set; }
     public string? Notas { get; set; }
+    public int? ClienteUsuarioId { get; set; }
+    public string Etapa { get; set; } = "Valoración";
     public string? TokenAcceso { get; set; }
     public DateTime? TokenGeneradoEn { get; set; }
 }

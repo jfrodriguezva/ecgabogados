@@ -158,6 +158,8 @@ export default function UsuariosPage() {
             className="mt-2 w-full border border-brand-line bg-brand-ink px-4 py-2.5 text-brand-cream outline-none focus:border-brand-gold"
           >
             <option value="Asistente">Asistente</option>
+            <option value="Abogado">Abogado</option>
+            <option value="Cliente">Cliente</option>
             <option value="Administrador">Administrador</option>
           </select>
         </div>
@@ -212,6 +214,8 @@ export default function UsuariosPage() {
                     className="border border-brand-line bg-brand-ink px-3 py-2 text-sm text-brand-cream outline-none focus:border-brand-gold disabled:opacity-50"
                   >
                     <option value="Asistente">Asistente</option>
+                    <option value="Abogado">Abogado</option>
+                    <option value="Cliente">Cliente</option>
                     <option value="Administrador">Administrador</option>
                   </select>
                   <div className="flex gap-2">

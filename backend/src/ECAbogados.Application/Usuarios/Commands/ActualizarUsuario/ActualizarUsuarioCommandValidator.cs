@@ -7,8 +7,8 @@ public class ActualizarUsuarioCommandValidator : AbstractValidator<ActualizarUsu
     public ActualizarUsuarioCommandValidator()
     {
         RuleFor(x => x.Nombre).NotEmpty().MaximumLength(200);
-        RuleFor(x => x.Rol).NotEmpty().Must(r => r is "Administrador" or "Asistente")
-            .WithMessage("Rol debe ser 'Administrador' o 'Asistente'.");
+        RuleFor(x => x.Rol).NotEmpty().Must(r => r is "Administrador" or "Abogado" or "Asistente" or "Cliente")
+            .WithMessage("Rol no válido.");
         RuleFor(x => x.NuevaPassword).MinimumLength(8).When(x => !string.IsNullOrEmpty(x.NuevaPassword));
     }
 }

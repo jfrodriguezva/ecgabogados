@@ -29,6 +29,9 @@ public class FakeCasoRepository : ICasoRepository
     public Task<Caso?> GetByTokenAsync(string token) =>
         Task.FromResult(_casos.FirstOrDefault(c => c.TokenAcceso == token));
 
+    public Task<IReadOnlyList<Caso>> GetByClienteUsuarioIdAsync(int usuarioId) =>
+        Task.FromResult<IReadOnlyList<Caso>>(_casos.Where(c => c.ClienteUsuarioId == usuarioId).ToList());
+
     public Task<int> CreateAsync(Caso caso)
     {
         caso.Id = _nextId++;
@@ -43,6 +46,14 @@ public class FakeCasoRepository : ICasoRepository
         existente.Tipo = caso.Tipo;
         existente.Estatus = caso.Estatus;
         existente.Notas = caso.Notas;
+        return Task.CompletedTask;
+    }
+
+    public Task AsignarClienteYEtapaAsync(int id, int? clienteUsuarioId, string etapa)
+    {
+        var caso = _casos.First(c => c.Id == id);
+        caso.ClienteUsuarioId = clienteUsuarioId;
+        caso.Etapa = etapa;
         return Task.CompletedTask;
     }
 

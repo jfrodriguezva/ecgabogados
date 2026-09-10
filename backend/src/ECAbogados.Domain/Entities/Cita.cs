@@ -13,6 +13,10 @@ public class Cita
     public int? CasoId { get; set; }
     public string NombreCliente { get; set; } = string.Empty;
     public string Telefono { get; set; } = string.Empty;
+    public string? Email { get; set; }
+    public string Servicio { get; set; } = string.Empty;
+    public string Modalidad { get; set; } = string.Empty;
+    public string? Comentario { get; set; }
     public DateTime FechaHora { get; set; }
     public EstatusCita Estatus { get; set; }
     public bool RecordatorioEnviado { get; set; }
