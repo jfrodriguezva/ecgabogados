@@ -192,6 +192,22 @@ async function request<T>(
   return text ? (JSON.parse(text) as T) : (undefined as T);
 }
 
+async function descargar(path: string, nombreArchivo: string): Promise<void> {
+  const token = getCookie("ecg_token");
+  const headers = new Headers();
+  if (token) headers.set("Authorization", `Bearer ${token}`);
+  const res = await fetch(`${API_URL}${path}`, { headers });
+  if (!res.ok) throw new ApiError("No se pudo descargar el documento.", res.status);
+  const url = URL.createObjectURL(await res.blob());
+  const enlace = document.createElement("a");
+  enlace.href = url;
+  enlace.download = nombreArchivo;
+  document.body.appendChild(enlace);
+  enlace.click();
+  enlace.remove();
+  URL.revokeObjectURL(url);
+}
+
 // ---- Auth ----
 
 export function login(email: string, password: string) {
@@ -228,6 +244,10 @@ export function enviarMensajeCaso(casoId:number, mensaje:string) {
 export function subirDocumentoCliente(casoId:number, file:File) {
   const data=new FormData(); data.append("file",file);
   return request<{id:number}>("/api/mi-portal/casos/"+casoId+"/documentos",{method:"POST",body:data});
+}
+
+export function descargarDocumentoCliente(casoId:number, documento:Documento) {
+  return descargar(`/api/mi-portal/casos/${casoId}/documentos/${documento.id}/archivo`, documento.nombreArchivo);
 }
 
 // ---- Casos ----
@@ -321,6 +341,10 @@ export function subirDocumento(casoId: number | string, file: File) {
     method: "POST",
     body: formData,
   });
+}
+
+export function descargarDocumento(documento: Documento) {
+  return descargar(`/api/documentos/${documento.id}/archivo`, documento.nombreArchivo);
 }
 
 // ---- Contacto ----

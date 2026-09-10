@@ -76,4 +76,19 @@ public class MiPortalController(
         });
         return Created(string.Empty, new { id });
     }
+
+    [HttpGet("casos/{casoId:int}/documentos/{documentoId:int}/archivo")]
+    public async Task<IActionResult> DescargarDocumento(int casoId, int documentoId)
+    {
+        if (currentUser.UsuarioId is not int usuarioId) return Unauthorized();
+        var caso = await casos.GetByIdAsync(casoId);
+        if (caso?.ClienteUsuarioId != usuarioId) return Forbid();
+        var documento = await documentos.GetByIdAsync(documentoId);
+        if (documento is null || documento.CasoId != casoId) return NotFound();
+
+        var raiz = Path.GetFullPath(environment.ContentRootPath) + Path.DirectorySeparatorChar;
+        var ruta = Path.GetFullPath(Path.Combine(environment.ContentRootPath, documento.RutaAlmacenamiento));
+        if (!ruta.StartsWith(raiz, StringComparison.OrdinalIgnoreCase) || !System.IO.File.Exists(ruta)) return NotFound();
+        return PhysicalFile(ruta, documento.TipoContenido ?? "application/octet-stream", documento.NombreArchivo, enableRangeProcessing: true);
+    }
 }

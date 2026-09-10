@@ -6,6 +6,20 @@ namespace ECAbogados.Infrastructure.Persistence.Repositories;
 
 public class DocumentoRepository(SqlConnectionFactory connectionFactory) : IDocumentoRepository
 {
+    public async Task<Documento?> GetByIdAsync(int id)
+    {
+        return await ResiliencePolicies.SqlRetryPolicy.ExecuteAsync(async () =>
+        {
+            using var connection = await connectionFactory.CreateOpenConnectionAsync();
+            const string sql = """
+                SELECT Id, CasoId, NombreArchivo, TipoContenido, TamanoBytes, FechaCarga, RutaAlmacenamiento
+                FROM dbo.Documentos
+                WHERE Id = @Id
+                """;
+            return await connection.QuerySingleOrDefaultAsync<Documento>(sql, new { Id = id });
+        });
+    }
+
     public async Task<IReadOnlyList<Documento>> GetByCasoIdAsync(int casoId)
     {
         return await ResiliencePolicies.SqlRetryPolicy.ExecuteAsync(async () =>

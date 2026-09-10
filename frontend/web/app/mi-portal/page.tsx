@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Monogram from "@/components/Monogram";
-import { getMisCasos, type MiCaso } from "@/lib/api";
+import { descargarDocumentoCliente, getMisCasos, type MiCaso } from "@/lib/api";
 import { deleteCookie, getCookie } from "@/lib/cookies";
 import ConversacionCaso from "@/components/ConversacionCaso";
 import CargaDocumentoCliente from "@/components/CargaDocumentoCliente";
@@ -55,7 +55,7 @@ export default function MiPortalPage() {
                 {ETAPAS.map((etapa, i) => <div key={etapa} className={i <= actual ? "border-t-2 border-brand-gold pt-2 text-xs text-brand-cream" : "border-t border-brand-line pt-2 text-xs text-brand-creamSoft"}>{etapa}</div>)}
               </div>
               <div className="mt-8 grid gap-5 lg:grid-cols-3">
-                <Panel titulo="Documentos"><p>{caso.documentos.length} archivo(s) disponible(s)</p>{caso.documentos.map(x => <p key={x.id} className="mt-2 text-brand-cream">{x.nombreArchivo}</p>)}</Panel>
+                <Panel titulo="Documentos"><p>{caso.documentos.length} archivo(s) disponible(s)</p>{caso.documentos.map(x => <button type="button" onClick={() => descargarDocumentoCliente(caso.id, x)} key={x.id} className="mt-2 block text-left text-brand-cream underline decoration-brand-gold/50 underline-offset-4 hover:text-brand-gold">{x.nombreArchivo}</button>)}</Panel>
                 <Panel titulo="Fechas importantes">{caso.fechas.length ? caso.fechas.map(x => <p key={x.id} className="mt-2">{new Date(x.fechaLimite).toLocaleDateString("es-MX")} · {x.descripcion}</p>) : <p>Sin fechas publicadas.</p>}</Panel>
                 <Panel titulo="Honorarios y pagos"><p>Total registrado: {caso.totalPagado.toLocaleString("es-MX", {style:"currency", currency:"MXN"})}</p><p className="mt-2 text-xs">Este portal no procesa pagos.</p></Panel>
               </div>

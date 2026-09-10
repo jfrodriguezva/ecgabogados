@@ -40,6 +40,7 @@ Base: `/api`
 | | `POST /citas` | Anónimo | Crear (usado por el sitio público) |
 | | `PATCH /citas/{id}/estatus` | JWT | Confirmar/cancelar |
 | Documentos | `GET /documentos/caso/{casoId}` | JWT | Listar por caso |
+| | `GET /documentos/{id}/archivo` | JWT (personal) | Descargar archivo |
 | | `POST /documentos` (multipart, máx. 50 MB) | JWT | Subir archivo |
 | Contacto | `POST /contacto` | Anónimo | Crear mensaje (formulario público) |
 | | `GET /contacto` | JWT | Listar mensajes |

@@ -1,6 +1,7 @@
 using ECAbogados.Application.Documentos;
 using ECAbogados.Application.Documentos.Commands.SubirDocumento;
 using ECAbogados.Application.Documentos.Queries.ListarDocumentosPorCaso;
+using ECAbogados.Application.Interfaces;
 using ECAbogados.Application.Mediation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,8 +11,18 @@ namespace ECAbogados.Api.Controllers;
 [Authorize(Roles = "Administrador,Abogado,Asistente")]
 [ApiController]
 [Route("api/[controller]")]
-public class DocumentosController(ISender sender, IWebHostEnvironment environment) : ControllerBase
+public class DocumentosController(ISender sender, IDocumentoRepository documentos, IWebHostEnvironment environment) : ControllerBase
 {
+    [HttpGet("{id:int}/archivo")]
+    public async Task<IActionResult> Descargar(int id)
+    {
+        var documento = await documentos.GetByIdAsync(id);
+        if (documento is null) return NotFound();
+        var ruta = RutaDocumentoSegura(documento.RutaAlmacenamiento);
+        if (ruta is null || !System.IO.File.Exists(ruta)) return NotFound();
+        return PhysicalFile(ruta, documento.TipoContenido ?? "application/octet-stream", documento.NombreArchivo, enableRangeProcessing: true);
+    }
+
     [HttpGet("caso/{casoId:int}")]
     public async Task<IActionResult> ListarPorCaso(int casoId)
     {
@@ -65,6 +76,13 @@ public class DocumentosController(ISender sender, IWebHostEnvironment environmen
         var id = await sender.Send(command);
 
         return CreatedAtAction(nameof(ListarPorCaso), new { casoId }, new { id });
+    }
+
+    private string? RutaDocumentoSegura(string rutaRelativa)
+    {
+        var raiz = Path.GetFullPath(environment.ContentRootPath) + Path.DirectorySeparatorChar;
+        var ruta = Path.GetFullPath(Path.Combine(environment.ContentRootPath, rutaRelativa));
+        return ruta.StartsWith(raiz, StringComparison.OrdinalIgnoreCase) ? ruta : null;
     }
 }
 

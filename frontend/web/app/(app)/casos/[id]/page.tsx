@@ -8,6 +8,7 @@ import { IconFile, IconUpload } from "@/components/icons";
 import { getCookie } from "@/lib/cookies";
 import {
   cambiarEstatusCaso,
+  descargarDocumento,
   actualizarEtapaCaso,
   crearPlazo,
   getAuditoriaPorCaso,
@@ -357,6 +358,9 @@ export default function CasoDetailPage() {
                       </p>
                     </div>
                   </div>
+                  <button type="button" onClick={() => descargarDocumento(d)} className="text-[10px] font-semibold uppercase tracking-widest text-brand-gold hover:underline">
+                    Descargar
+                  </button>
                 </li>
               ))}
             </ul>
