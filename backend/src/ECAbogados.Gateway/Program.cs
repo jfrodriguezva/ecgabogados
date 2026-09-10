@@ -4,6 +4,9 @@ using Ocelot.Middleware;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
+// Permite sustituir host/puerto del downstream en contenedores o hosting sin
+// mantener otro archivo Ocelot (ej. Routes__0__DownstreamHostAndPorts__0__Host).
+builder.Configuration.AddEnvironmentVariables();
 
 var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
     ?? ["http://localhost:3000"];
@@ -22,7 +25,7 @@ builder.Services.AddOcelot(builder.Configuration);
 
 var app = builder.Build();
 
-if (!app.Environment.IsDevelopment())
+if (!app.Environment.IsDevelopment() && builder.Configuration.GetValue("Security:UseHttpsRedirection", true))
 {
     app.UseHsts();
     app.UseHttpsRedirection();

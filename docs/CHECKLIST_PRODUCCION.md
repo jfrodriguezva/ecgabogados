@@ -40,6 +40,7 @@ No guardar secretos reales en GitHub. Configurarlos en el hosting:
 - [x] La API incluye encabezados defensivos, respuestas de error seguras y `GET /health` para monitoreo.
 - [x] Frontend y Gateway incluyen encabezados defensivos; el Gateway enruta todas las funciones `/api/*` y cuenta con su propia comprobación de salud.
 - [x] Dependabot revisa semanalmente las dependencias de npm/NuGet y mensualmente GitHub Actions.
+- [x] Existen imágenes reproducibles para web, API y Gateway, más Compose con volúmenes persistentes; CI valida su configuración.
 
 ## 5. Prueba de aceptación
 

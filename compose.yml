@@ -1,0 +1,66 @@
+services:
+  sql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: Express
+      MSSQL_SA_PASSWORD: ${ECG_SQL_PASSWORD:?Define ECG_SQL_PASSWORD en .env.container}
+    volumes:
+      - sql-data:/var/opt/mssql
+    restart: unless-stopped
+
+  api:
+    build:
+      context: backend
+      dockerfile: Dockerfile.api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__Default: Server=sql,1433;Database=ECGAbogados;User Id=sa;Password=${ECG_SQL_PASSWORD};Encrypt=True;TrustServerCertificate=True
+      Jwt__Secret: ${ECG_JWT_SECRET:?Define ECG_JWT_SECRET en .env.container}
+      Cors__AllowedOrigins__0: ${ECG_PUBLIC_SITE_URL:-http://localhost:3000}
+      Sitio__BaseUrl: ${ECG_PUBLIC_SITE_URL:-http://localhost:3000}
+      Security__UseHttpsRedirection: "false"
+      Smtp__Host: ${ECG_SMTP_HOST:-}
+      Smtp__Port: ${ECG_SMTP_PORT:-587}
+      Smtp__User: ${ECG_SMTP_USER:-}
+      Smtp__Password: ${ECG_SMTP_PASSWORD:-}
+      Smtp__From: ${ECG_SMTP_FROM:-}
+      Notificaciones__StaffEmail: ${ECG_STAFF_EMAIL:-}
+    volumes:
+      - documentos:/app/App_Data/documentos
+    depends_on:
+      - sql
+    restart: unless-stopped
+
+  gateway:
+    build:
+      context: backend
+      dockerfile: Dockerfile.gateway
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      Routes__0__DownstreamHostAndPorts__0__Host: api
+      Routes__0__DownstreamHostAndPorts__0__Port: 5080
+      GlobalConfiguration__BaseUrl: ${ECG_PUBLIC_API_URL:-http://localhost:5000}
+      Cors__AllowedOrigins__0: ${ECG_PUBLIC_SITE_URL:-http://localhost:3000}
+      Security__UseHttpsRedirection: "false"
+    ports:
+      - "5000:5000"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  web:
+    build:
+      context: frontend/web
+      args:
+        NEXT_PUBLIC_API_URL: ${ECG_PUBLIC_API_URL:-http://localhost:5000}
+        NEXT_PUBLIC_SITE_URL: ${ECG_PUBLIC_SITE_URL:-http://localhost:3000}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - gateway
+    restart: unless-stopped
+
+volumes:
+  sql-data:
+  documentos:

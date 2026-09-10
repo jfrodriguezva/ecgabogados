@@ -40,3 +40,6 @@ El sistema anterior permanece en la carpeta Lawyer y no forma parte de este proy
 El MVP funcional está implementado. Antes de utilizar datos reales deben completarse el
 hosting, secretos, correo, respaldos, aviso de privacidad y prueba de aceptación indicados
 en [`docs/CHECKLIST_PRODUCCION.md`](docs/CHECKLIST_PRODUCCION.md).
+
+Para levantar un ambiente reproducible con contenedores, consultar
+[`docs/CONTENEDORES.md`](docs/CONTENEDORES.md).

@@ -1,0 +1,10 @@
+**/bin
+**/obj
+**/node_modules
+**/.next
+**/App_Data
+.git
+.github-auth
+*.user
+*.log
+**/.env*

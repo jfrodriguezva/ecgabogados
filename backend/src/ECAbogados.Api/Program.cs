@@ -124,7 +124,7 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
-if (!app.Environment.IsDevelopment())
+if (!app.Environment.IsDevelopment() && builder.Configuration.GetValue("Security:UseHttpsRedirection", true))
 {
     app.UseHsts();
     app.UseHttpsRedirection();
