@@ -125,6 +125,41 @@
       "DownstreamPathTemplate": "/api/auditoria/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [ { "Host": "localhost", "Port": 5080 } ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/clientes/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
+      "DownstreamPathTemplate": "/api/clientes/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [ { "Host": "localhost", "Port": 5080 } ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/clientes",
+      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "DownstreamPathTemplate": "/api/clientes",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [ { "Host": "localhost", "Port": 5080 } ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/tarifas/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+      "DownstreamPathTemplate": "/api/tarifas/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [ { "Host": "localhost", "Port": 5080 } ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/tarifas",
+      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "DownstreamPathTemplate": "/api/tarifas",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [ { "Host": "localhost", "Port": 5080 } ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/mi-portal/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "DownstreamPathTemplate": "/api/mi-portal/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [ { "Host": "localhost", "Port": 5080 } ]
     }
   ],
   "GlobalConfiguration": {
