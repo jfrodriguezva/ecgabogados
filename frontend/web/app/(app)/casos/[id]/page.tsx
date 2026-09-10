@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useParams, useRouter } from "next/navigation";
 import StatusPill from "@/components/StatusPill";
+import ConversacionCaso from "@/components/ConversacionCaso";
 import { IconFile, IconUpload } from "@/components/icons";
 import { getCookie } from "@/lib/cookies";
 import {
@@ -495,6 +496,7 @@ export default function CasoDetailPage() {
         </section>
 
         <section className="space-y-6">
+          <ConversacionCaso casoId={Number(params.id)} />
           <div className="border border-brand-line bg-brand-ink2 p-6">
             <h2 className="text-xs font-medium uppercase tracking-[0.2em] text-brand-creamSoft">
               Estatus del expediente
