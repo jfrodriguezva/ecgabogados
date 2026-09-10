@@ -23,23 +23,25 @@ export default function UsuariosPage() {
   const [savingEdit, setSavingEdit] = useState(false);
 
   function load() {
-    setLoading(true);
     getUsuarios()
       .then(setUsuarios)
       .catch(() => setError("No se pudo cargar el equipo. ¿Tu cuenta tiene rol Administrador?"))
       .finally(() => setLoading(false));
   }
 
-  useEffect(load, []);
+  useEffect(() => {
+    void load();
+  }, []);
 
   useEffect(() => {
     const raw = getCookie("ecg_user");
-    if (raw) {
-      try {
-        setMiCorreo(JSON.parse(raw).email ?? null);
-      } catch {
-        // ignore malformed cookie
-      }
+    if (!raw) return;
+    try {
+      // La cookie solo está disponible después del montaje en el navegador.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setMiCorreo(JSON.parse(raw).email ?? null);
+    } catch {
+      // Cookie inválida: la API seguirá aplicando las restricciones reales.
     }
   }, []);
 

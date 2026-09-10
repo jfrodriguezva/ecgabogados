@@ -1,13 +1,13 @@
 "use client";
-import { useEffect, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { enviarMensajeCaso, getMensajesCaso, type MensajeExpediente } from "@/lib/api";
 
 export default function ConversacionCaso({casoId}:{casoId:number}) {
   const [items,setItems]=useState<MensajeExpediente[]>([]);
   const [texto,setTexto]=useState("");
   const [error,setError]=useState("");
-  const cargar=()=>getMensajesCaso(casoId).then(setItems).catch(()=>setError("No fue posible cargar la conversación."));
-  useEffect(()=>{cargar()},[casoId]);
+  const cargar=useCallback(()=>getMensajesCaso(casoId).then(setItems).catch(()=>setError("No fue posible cargar la conversación.")),[casoId]);
+  useEffect(()=>{void cargar()},[cargar]);
   async function enviar(e:FormEvent) {
     e.preventDefault(); if(!texto.trim()) return;
     try { await enviarMensajeCaso(casoId,texto); setTexto(""); await cargar(); } catch { setError("No fue posible enviar el mensaje."); }

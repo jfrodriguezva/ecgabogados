@@ -26,14 +26,15 @@ export default function CasosPage() {
   const [notas, setNotas] = useState("");
 
   function load() {
-    setLoading(true);
     getCasos()
       .then(setCasos)
       .catch(() => setError("No se pudieron cargar los expedientes."))
       .finally(() => setLoading(false));
   }
 
-  useEffect(load, []);
+  useEffect(() => {
+    void load();
+  }, []);
 
   async function handleCreate(e: FormEvent) {
     e.preventDefault();

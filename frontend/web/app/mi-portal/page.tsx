@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Monogram from "@/components/Monogram";
 import { getMisCasos, type MiCaso } from "@/lib/api";
@@ -11,19 +12,20 @@ import CargaDocumentoCliente from "@/components/CargaDocumentoCliente";
 const ETAPAS = ["Valoración", "Integración documental", "Preparación", "Presentado", "En trámite", "Resolución", "Concluido"];
 
 export default function MiPortalPage() {
+  const router = useRouter();
   const [casos, setCasos] = useState<MiCaso[]>([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!getCookie("ecg_token")) { window.location.href = "/login"; return; }
+    if (!getCookie("ecg_token")) { router.replace("/login"); return; }
     getMisCasos().then(setCasos).catch(() => setError("No fue posible cargar tus asuntos.")).finally(() => setCargando(false));
-  }, []);
+  }, [router]);
 
   function salir() {
     deleteCookie("ecg_token");
     deleteCookie("ecg_user");
-    window.location.href = "/";
+    router.push("/");
   }
 
   return (

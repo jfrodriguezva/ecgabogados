@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import { useParams, useRouter } from "next/navigation";
 import StatusPill from "@/components/StatusPill";
 import ConversacionCaso from "@/components/ConversacionCaso";
@@ -67,8 +67,7 @@ export default function CasoDetailPage() {
   const [pagoMonto, setPagoMonto] = useState("");
   const [savingPago, setSavingPago] = useState(false);
 
-  function load() {
-    setLoading(true);
+  const load = useCallback(() => {
     Promise.all([
       getCaso(params.id),
       getDocumentosPorCaso(params.id),
@@ -81,27 +80,30 @@ export default function CasoDetailPage() {
       })
       .catch(() => setError("No se pudo cargar el expediente."))
       .finally(() => setLoading(false));
-  }
+  }, [params.id]);
 
-  useEffect(load, [params.id]);
+  useEffect(() => {
+    void load();
+  }, [load]);
 
   useEffect(() => {
     const raw = getCookie("ecg_user");
-    if (raw) {
-      try {
-        const admin = JSON.parse(raw).rol === "Administrador";
-        setIsAdmin(admin);
-        if (admin) {
+    if (!raw) return;
+    try {
+      const admin = JSON.parse(raw).rol === "Administrador";
+      // La cookie solo está disponible después del montaje en el navegador.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setIsAdmin(admin);
+      if (admin) {
           getPagosPorCaso(params.id)
             .then(setPagos)
             .catch(() => undefined);
           getAuditoriaPorCaso(params.id)
             .then(setAuditoria)
             .catch(() => undefined);
-        }
-      } catch {
-        // ignore malformed cookie
       }
+    } catch {
+      // Cookie inválida: la API conserva el control de autorización.
     }
   }, [params.id]);
 
@@ -514,6 +516,24 @@ export default function CasoDetailPage() {
 
         <section className="space-y-6">
           <ConversacionCaso casoId={Number(params.id)} />
+          {isAdmin && caso.tokenAcceso && (
+            <div className="border border-brand-line bg-brand-ink2 p-6">
+              <h2 className="text-xs font-medium uppercase tracking-[0.2em] text-brand-creamSoft">
+                Enlace alternativo del expediente
+              </h2>
+              <p className="mt-2 text-xs leading-relaxed text-brand-creamSoft">
+                Acceso temporal para compartir cuando el cliente todavía no usa su cuenta.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <button onClick={handleCopiarLink} className="border border-brand-gold px-3 py-2 text-[10px] font-semibold uppercase tracking-widest text-brand-gold">
+                  {copiado ? "Copiado" : "Copiar enlace"}
+                </button>
+                <button onClick={handleRegenerarLink} disabled={regenerando} className="border border-brand-line px-3 py-2 text-[10px] font-semibold uppercase tracking-widest text-brand-creamSoft disabled:opacity-60">
+                  {regenerando ? "Regenerando…" : "Regenerar"}
+                </button>
+              </div>
+            </div>
+          )}
           <div className="border border-brand-line bg-brand-ink2 p-6">
             <h2 className="text-xs font-medium uppercase tracking-[0.2em] text-brand-creamSoft">
               Estatus del expediente

@@ -17,6 +17,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     if (!token) {
       router.replace("/login");
     } else {
+      // La cookie solo existe en el navegador; este estado concluye la verificación inicial.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setChecked(true);
     }
   }, [router]);

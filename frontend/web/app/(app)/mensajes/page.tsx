@@ -9,14 +9,15 @@ export default function MensajesPage() {
   const [error, setError] = useState<string | null>(null);
 
   function load() {
-    setLoading(true);
     getMensajesContacto()
       .then(setMensajes)
       .catch(() => setError("No se pudieron cargar los mensajes."))
       .finally(() => setLoading(false));
   }
 
-  useEffect(load, []);
+  useEffect(() => {
+    void load();
+  }, []);
 
   async function handleAtendido(id: number) {
     try {

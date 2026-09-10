@@ -31,12 +31,13 @@ export default function Sidebar({
 
   useEffect(() => {
     const raw = getCookie("ecg_user");
-    if (raw) {
-      try {
-        setIsAdmin(JSON.parse(raw).rol === "Administrador");
-      } catch {
-        // ignore malformed cookie
-      }
+    if (!raw) return;
+    try {
+      // La cookie solo está disponible después del montaje en el navegador.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setIsAdmin(JSON.parse(raw).rol === "Administrador");
+    } catch {
+      // Cookie inválida: se muestran únicamente las opciones comunes.
     }
   }, []);
 

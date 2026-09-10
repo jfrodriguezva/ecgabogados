@@ -63,14 +63,15 @@ export default function AgendaPage() {
   const [casoId, setCasoId] = useState("");
 
   function load() {
-    setLoading(true);
     getCitas()
       .then(setCitas)
       .catch(() => setError("No se pudieron cargar las citas."))
       .finally(() => setLoading(false));
   }
 
-  useEffect(load, []);
+  useEffect(() => {
+    void load();
+  }, []);
 
   const eventos: CitaEvento[] = useMemo(
     () =>

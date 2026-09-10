@@ -39,9 +39,11 @@ export default function DashboardPage() {
     const raw = getCookie("ecg_user");
     if (raw) {
       try {
+        // La cookie solo existe después de montar el componente en el navegador.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setNombre(JSON.parse(raw).nombre ?? "");
       } catch {
-        // ignore malformed cookie
+        // Cookie inválida: se conserva el saludo genérico.
       }
     }
 

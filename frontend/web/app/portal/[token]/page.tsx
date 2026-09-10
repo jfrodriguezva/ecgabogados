@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import Monogram from "@/components/Monogram";
 import StatusPill from "@/components/StatusPill";
@@ -23,15 +23,16 @@ export default function PortalClientePage() {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  function load() {
-    setLoading(true);
+  const load = useCallback(() => {
     getCasoPorToken(params.token)
       .then(setCaso)
       .catch(() => setNotFound(true))
       .finally(() => setLoading(false));
-  }
+  }, [params.token]);
 
-  useEffect(load, [params.token]);
+  useEffect(() => {
+    void load();
+  }, [load]);
 
   async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
