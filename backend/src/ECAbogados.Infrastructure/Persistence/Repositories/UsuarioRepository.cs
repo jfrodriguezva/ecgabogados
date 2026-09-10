@@ -1,0 +1,138 @@
+using Dapper;
+using ECAbogados.Application.Interfaces;
+using ECAbogados.Domain.Entities;
+
+namespace ECAbogados.Infrastructure.Persistence.Repositories;
+
+public class UsuarioRepository(SqlConnectionFactory connectionFactory) : IUsuarioRepository
+{
+    public async Task<Usuario?> GetByEmailAsync(string email)
+    {
+        return await ResiliencePolicies.SqlRetryPolicy.ExecuteAsync(async () =>
+        {
+            using var connection = await connectionFactory.CreateOpenConnectionAsync();
+
+            const string sql = """
+                SELECT Id, Email, PasswordHash, Nombre, Rol, Activo, IntentosFallidos, BloqueadoHasta, ResetToken, ResetTokenExpira
+                FROM dbo.Usuarios
+                WHERE Email = @Email
+                """;
+
+            return await connection.QuerySingleOrDefaultAsync<Usuario>(sql, new { Email = email });
+        });
+    }
+
+    public async Task<Usuario?> GetByResetTokenAsync(string resetToken)
+    {
+        return await ResiliencePolicies.SqlRetryPolicy.ExecuteAsync(async () =>
+        {
+            using var connection = await connectionFactory.CreateOpenConnectionAsync();
+
+            const string sql = """
+                SELECT Id, Email, PasswordHash, Nombre, Rol, Activo, IntentosFallidos, BloqueadoHasta, ResetToken, ResetTokenExpira
+                FROM dbo.Usuarios
+                WHERE ResetToken = @ResetToken
+                """;
+
+            return await connection.QuerySingleOrDefaultAsync<Usuario>(sql, new { ResetToken = resetToken });
+        });
+    }
+
+    public async Task<IReadOnlyList<Usuario>> GetAllAsync()
+    {
+        return await ResiliencePolicies.SqlRetryPolicy.ExecuteAsync(async () =>
+        {
+            using var connection = await connectionFactory.CreateOpenConnectionAsync();
+
+            const string sql = """
+                SELECT Id, Email, PasswordHash, Nombre, Rol, Activo, IntentosFallidos, BloqueadoHasta, ResetToken, ResetTokenExpira
+                FROM dbo.Usuarios
+                ORDER BY Nombre
+                """;
+
+            var rows = await connection.QueryAsync<Usuario>(sql);
+            return rows.ToList();
+        });
+    }
+
+    public async Task<int> CreateAsync(Usuario usuario)
+    {
+        return await ResiliencePolicies.SqlRetryPolicy.ExecuteAsync(async () =>
+        {
+            using var connection = await connectionFactory.CreateOpenConnectionAsync();
+
+            const string sql = """
+                INSERT INTO dbo.Usuarios (Email, PasswordHash, Nombre, Rol)
+                OUTPUT INSERTED.Id
+                VALUES (@Email, @PasswordHash, @Nombre, @Rol)
+                """;
+
+            return await connection.ExecuteScalarAsync<int>(sql, usuario);
+        });
+    }
+
+    public async Task SetActivoAsync(int id, bool activo)
+    {
+        await ResiliencePolicies.SqlRetryPolicy.ExecuteAsync(async () =>
+        {
+            using var connection = await connectionFactory.CreateOpenConnectionAsync();
+
+            const string sql = "UPDATE dbo.Usuarios SET Activo = @Activo WHERE Id = @Id";
+            await connection.ExecuteAsync(sql, new { Id = id, Activo = activo });
+        });
+    }
+
+    public async Task UpdateAsync(Usuario usuario)
+    {
+        await ResiliencePolicies.SqlRetryPolicy.ExecuteAsync(async () =>
+        {
+            using var connection = await connectionFactory.CreateOpenConnectionAsync();
+
+            const string sql = "UPDATE dbo.Usuarios SET Nombre = @Nombre, Rol = @Rol WHERE Id = @Id";
+            await connection.ExecuteAsync(sql, new { usuario.Id, usuario.Nombre, usuario.Rol });
+        });
+    }
+
+    public async Task UpdatePasswordHashAsync(int id, string passwordHash)
+    {
+        await ResiliencePolicies.SqlRetryPolicy.ExecuteAsync(async () =>
+        {
+            using var connection = await connectionFactory.CreateOpenConnectionAsync();
+
+            const string sql = "UPDATE dbo.Usuarios SET PasswordHash = @PasswordHash WHERE Id = @Id";
+            await connection.ExecuteAsync(sql, new { Id = id, PasswordHash = passwordHash });
+        });
+    }
+
+    public async Task UpdateSeguridadLoginAsync(int id, int intentosFallidos, DateTime? bloqueadoHasta)
+    {
+        await ResiliencePolicies.SqlRetryPolicy.ExecuteAsync(async () =>
+        {
+            using var connection = await connectionFactory.CreateOpenConnectionAsync();
+
+            const string sql = """
+                UPDATE dbo.Usuarios
+                SET IntentosFallidos = @IntentosFallidos, BloqueadoHasta = @BloqueadoHasta
+                WHERE Id = @Id
+                """;
+
+            await connection.ExecuteAsync(sql, new { Id = id, IntentosFallidos = intentosFallidos, BloqueadoHasta = bloqueadoHasta });
+        });
+    }
+
+    public async Task SetResetTokenAsync(int id, string? resetToken, DateTime? resetTokenExpira)
+    {
+        await ResiliencePolicies.SqlRetryPolicy.ExecuteAsync(async () =>
+        {
+            using var connection = await connectionFactory.CreateOpenConnectionAsync();
+
+            const string sql = """
+                UPDATE dbo.Usuarios
+                SET ResetToken = @ResetToken, ResetTokenExpira = @ResetTokenExpira
+                WHERE Id = @Id
+                """;
+
+            await connection.ExecuteAsync(sql, new { Id = id, ResetToken = resetToken, ResetTokenExpira = resetTokenExpira });
+        });
+    }
+}

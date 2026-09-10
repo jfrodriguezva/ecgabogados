@@ -1,0 +1,29 @@
+# .NET
+**/bin/
+**/obj/
+*.user
+*.suo
+
+# Next.js / Node
+**/node_modules/
+**/.next/
+**/out/
+*.tsbuildinfo
+
+# Secrets and local configuration
+.github-auth/
+**/.env
+**/.env.local
+**/.env.*.local
+**/App_Data/
+**/appsettings.Local.json
+
+# IDE / OS
+.vs/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
