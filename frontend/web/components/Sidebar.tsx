@@ -30,7 +30,7 @@ export default function Sidebar({
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    const raw = getCookie("ec_user");
+    const raw = getCookie("ecg_user");
     if (raw) {
       try {
         setIsAdmin(JSON.parse(raw).rol === "Administrador");
@@ -43,8 +43,8 @@ export default function Sidebar({
   const items = isAdmin ? [...NAV, NAV_CLIENTES, NAV_TARIFAS, NAV_ADMIN] : NAV;
 
   function handleLogout() {
-    deleteCookie("ec_token");
-    deleteCookie("ec_user");
+    deleteCookie("ecg_token");
+    deleteCookie("ecg_user");
     onNavigate?.();
     router.push("/login");
   }

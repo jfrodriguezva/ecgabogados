@@ -8,6 +8,7 @@ import { IconFile, IconUpload } from "@/components/icons";
 import { getCookie } from "@/lib/cookies";
 import {
   cambiarEstatusCaso,
+  actualizarEtapaCaso,
   crearPlazo,
   getAuditoriaPorCaso,
   getCaso,
@@ -28,6 +29,7 @@ import {
 } from "@/lib/api";
 
 const ESTATUSES: EstatusCaso[] = ["Activo", "Revision", "Cerrado"];
+const ETAPAS = ["Valoración", "Integración documental", "Preparación", "Presentado", "En trámite", "Resolución", "Concluido"];
 
 function formatBytes(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
@@ -84,7 +86,7 @@ export default function CasoDetailPage() {
   useEffect(load, [params.id]);
 
   useEffect(() => {
-    const raw = getCookie("ec_user");
+    const raw = getCookie("ecg_user");
     if (raw) {
       try {
         const admin = JSON.parse(raw).rol === "Administrador";
@@ -266,6 +268,21 @@ export default function CasoDetailPage() {
 
       <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-3">
         <section className="lg:col-span-2 space-y-8">
+          <div className="border border-brand-line bg-brand-ink2 p-6">
+            <h2 className="text-xs font-medium uppercase tracking-[0.2em] text-brand-creamSoft">Etapa visible para el cliente</h2>
+            <select
+              value={caso.etapa}
+              onChange={async (e) => {
+                const etapa=e.target.value;
+                await actualizarEtapaCaso(caso.id,caso.clienteUsuarioId,etapa);
+                setCaso({...caso,etapa});
+              }}
+              className="mt-4 w-full border border-brand-line bg-brand-ink px-4 py-2.5 text-sm text-brand-cream outline-none focus:border-brand-gold"
+            >
+              {ETAPAS.map(x=><option key={x}>{x}</option>)}
+            </select>
+            <p className="mt-2 text-[11px] text-brand-creamSoft">Publica solo avances confirmados y fechas revisadas profesionalmente.</p>
+          </div>
           <div className="border border-brand-line bg-brand-ink2 p-6">
             <h2 className="text-xs font-medium uppercase tracking-[0.2em] text-brand-creamSoft">
               Notas del caso
@@ -523,36 +540,6 @@ export default function CasoDetailPage() {
             )}
           </div>
 
-          {caso.tokenAcceso && (
-            <div className="border border-brand-line bg-brand-ink2 p-6">
-              <h2 className="text-xs font-medium uppercase tracking-[0.2em] text-brand-creamSoft">
-                Portal del cliente
-              </h2>
-              <p className="mt-2 text-xs leading-relaxed text-brand-creamSoft">
-                Comparte este enlace por WhatsApp para que el cliente vea el estatus de su caso sin necesidad de cuenta.
-              </p>
-              {caso.tokenGeneradoEn && (
-                <p className="mt-2 text-[11px] text-brand-creamSoft/70">
-                  Generado el {new Date(caso.tokenGeneradoEn).toLocaleDateString("es-MX")} · vigente 180 días
-                </p>
-              )}
-              <button
-                onClick={handleCopiarLink}
-                className="mt-4 w-full border border-brand-gold px-4 py-2.5 text-[11px] font-semibold uppercase tracking-widest text-brand-gold transition-colors hover:bg-brand-gold hover:text-brand-ink"
-              >
-                {copiado ? "¡Copiado!" : "Copiar enlace"}
-              </button>
-              {isAdmin && (
-                <button
-                  onClick={handleRegenerarLink}
-                  disabled={regenerando}
-                  className="mt-2 w-full border border-brand-line px-4 py-2.5 text-[11px] font-semibold uppercase tracking-widest text-brand-creamSoft transition-colors hover:border-brand-goldDeep hover:text-brand-goldDeep disabled:opacity-60"
-                >
-                  {regenerando ? "Regenerando…" : "Regenerar enlace"}
-                </button>
-              )}
-            </div>
-          )}
         </section>
       </div>
     </div>

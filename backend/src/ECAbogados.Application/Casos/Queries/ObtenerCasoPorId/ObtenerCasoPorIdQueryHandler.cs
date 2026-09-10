@@ -43,6 +43,8 @@ public class ObtenerCasoPorIdQueryHandler(
             caso.Estatus,
             caso.FechaApertura,
             caso.Notas,
+            caso.ClienteUsuarioId,
+            caso.Etapa,
             caso.TokenAcceso,
             caso.TokenGeneradoEn,
             citasDelCaso,

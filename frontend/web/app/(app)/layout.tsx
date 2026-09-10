@@ -13,7 +13,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [navOpen, setNavOpen] = useState(false);
 
   useEffect(() => {
-    const token = getCookie("ec_token");
+    const token = getCookie("ecg_token");
     if (!token) {
       router.replace("/login");
     } else {

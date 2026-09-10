@@ -36,7 +36,7 @@ export default function DashboardPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const raw = getCookie("ec_user");
+    const raw = getCookie("ecg_user");
     if (raw) {
       try {
         setNombre(JSON.parse(raw).nombre ?? "");

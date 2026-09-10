@@ -17,6 +17,8 @@ public record CasoDetalleDto(
     EstatusCaso Estatus,
     DateTime FechaApertura,
     string? Notas,
+    int? ClienteUsuarioId,
+    string Etapa,
     string? TokenAcceso,
     DateTime? TokenGeneradoEn,
     IReadOnlyList<CitaDto> Citas,

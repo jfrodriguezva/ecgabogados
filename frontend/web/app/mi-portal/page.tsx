@@ -16,13 +16,13 @@ export default function MiPortalPage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!getCookie("ec_token")) { window.location.href = "/login"; return; }
+    if (!getCookie("ecg_token")) { window.location.href = "/login"; return; }
     getMisCasos().then(setCasos).catch(() => setError("No fue posible cargar tus asuntos.")).finally(() => setCargando(false));
   }, []);
 
   function salir() {
-    deleteCookie("ec_token");
-    deleteCookie("ec_user");
+    deleteCookie("ecg_token");
+    deleteCookie("ecg_user");
     window.location.href = "/";
   }
 

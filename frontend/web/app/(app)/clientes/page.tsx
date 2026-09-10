@@ -11,7 +11,7 @@ export default function ClientesPage() {
     const f=new FormData(e.currentTarget);
     try {
       await createCliente({nombre:String(f.get("nombre")),email:String(f.get("email")),passwordTemporal:String(f.get("password")),casoId:Number(f.get("casoId"))});
-      setMensaje("Cuenta creada y expediente vinculado. Comparte las credenciales temporalmente por un canal seguro.");
+      setMensaje("Cuenta creada y expediente vinculado. Se generó una invitación por correo; también puedes comunicar el acceso manualmente por un canal seguro.");
       e.currentTarget.reset();
     } catch { setMensaje("No fue posible crear la cuenta. Revisa si el correo ya está registrado."); }
   }

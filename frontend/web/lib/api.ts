@@ -65,6 +65,8 @@ export interface MensajeExpediente {
 }
 
 export interface CasoDetalle extends Caso {
+  clienteUsuarioId: number | null;
+  etapa: string;
   tokenAcceso: string | null;
   tokenGeneradoEn: string | null;
   citas: Cita[];
@@ -156,7 +158,7 @@ async function request<T>(
   path: string,
   options: RequestInit = {}
 ): Promise<T> {
-  const token = getCookie("ec_token");
+  const token = getCookie("ecg_token");
   const headers = new Headers(options.headers);
 
   if (!(options.body instanceof FormData) && options.body) {
@@ -236,6 +238,10 @@ export function getCasos() {
 
 export function getCaso(id: number | string) {
   return request<CasoDetalle>(`/api/casos/${id}`);
+}
+
+export function actualizarEtapaCaso(id:number|string, clienteUsuarioId:number|null, etapa:string) {
+  return request<void>("/api/casos/"+id+"/cliente-etapa",{method:"PATCH",body:JSON.stringify({clienteUsuarioId,etapa})});
 }
 
 export function createCaso(data: {

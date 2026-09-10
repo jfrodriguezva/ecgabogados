@@ -13,7 +13,7 @@ namespace ECAbogados.Api.Controllers;
 /// Portal del cliente: acceso público mediante un enlace mágico (token único por
 /// caso), sin registro ni contraseña. El staff comparte el link por WhatsApp/correo.
 /// </summary>
-[AllowAnonymous]
+[Authorize(Roles = "Administrador,Abogado,Asistente")]
 [EnableRateLimiting("public")]
 [ApiController]
 [Route("api/[controller]")]

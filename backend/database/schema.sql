@@ -2,13 +2,13 @@
 -- Ejecutar contra una base de datos vacía llamada ECAbogados (o la que se configure
 -- en ConnectionStrings:Default de backend/src/ECAbogados.Api/appsettings.json).
 
-IF NOT EXISTS (SELECT 1 FROM sys.databases WHERE name = N'ECAbogados')
+IF NOT EXISTS (SELECT 1 FROM sys.databases WHERE name = N'ECGAbogados')
 BEGIN
-    CREATE DATABASE ECAbogados;
+    CREATE DATABASE ECGAbogados;
 END
 GO
 
-USE ECAbogados;
+USE ECGAbogados;
 GO
 
 -- =========================================================

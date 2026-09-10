@@ -33,7 +33,7 @@ export default function UsuariosPage() {
   useEffect(load, []);
 
   useEffect(() => {
-    const raw = getCookie("ec_user");
+    const raw = getCookie("ecg_user");
     if (raw) {
       try {
         setMiCorreo(JSON.parse(raw).email ?? null);

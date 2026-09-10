@@ -135,7 +135,7 @@ El script es idempotente (usa `IF NOT EXISTS`) e incluye datos semilla:
 
 Cadena de conexión por defecto (`ConnectionStrings:Default`):
 ```
-Server=localhost;Database=ECAbogados;Trusted_Connection=True;TrustServerCertificate=True;
+Server=localhost;Database=ECGAbogados;Trusted_Connection=True;TrustServerCertificate=True;
 ```
 
 Los documentos subidos se guardan en **disco**, no en la base de datos ni en blob storage:
