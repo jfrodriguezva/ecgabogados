@@ -38,6 +38,8 @@ No guardar secretos reales en GitHub. Configurarlos en el hosting:
 - [ ] Verificar la restauración de respaldos.
 - [x] Swagger está desactivado por defecto fuera de desarrollo; no activar `Swagger__Enabled` públicamente.
 - [x] La API incluye encabezados defensivos, respuestas de error seguras y `GET /health` para monitoreo.
+- [x] Frontend y Gateway incluyen encabezados defensivos; el Gateway enruta todas las funciones `/api/*` y cuenta con su propia comprobación de salud.
+- [x] Dependabot revisa semanalmente las dependencias de npm/NuGet y mensualmente GitHub Actions.
 
 ## 5. Prueba de aceptación
 

@@ -8,6 +8,8 @@ Navegador → Frontend Next.js (:3000) → Gateway Ocelot (:5000) → API .NET (
 
 El frontend (`lib/api.ts`) apunta por defecto a `http://localhost:5000` (o a `NEXT_PUBLIC_API_URL` si está definida), es decir, normalmente pasa por el **Gateway**, que enruta cada `/api/*` hacia la API real en `localhost:5080`. La API también puede consumirse directamente sin pasar por el Gateway.
 
+El Gateway utiliza una ruta general `/api/{everything}`. Esto evita que una función nueva quede inaccesible por olvidar duplicar su ruta en Ocelot. También publica `GET /health` para monitoreo.
+
 ## 2. Backend — `ECAbogados` (.NET 10, Clean Architecture)
 
 5 proyectos en `backend/src/`:
