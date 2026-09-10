@@ -43,3 +43,6 @@ en [`docs/CHECKLIST_PRODUCCION.md`](docs/CHECKLIST_PRODUCCION.md).
 
 Para levantar un ambiente reproducible con contenedores, consultar
 [`docs/CONTENEDORES.md`](docs/CONTENEDORES.md).
+
+La alternativa inicial de tres servicios y costo mínimo está documentada en
+[`docs/ARQUITECTURA_ECONOMICA.md`](docs/ARQUITECTURA_ECONOMICA.md).

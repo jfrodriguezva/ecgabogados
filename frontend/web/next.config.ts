@@ -4,6 +4,19 @@ const nextConfig: NextConfig = {
   output: "standalone",
   poweredByHeader: false,
   agentRules: false,
+  async rewrites() {
+    const apiInterna = process.env.API_INTERNAL_URL ?? "http://localhost:5080";
+    return [
+      {
+        source: "/health",
+        destination: `${apiInterna}/health`,
+      },
+      {
+        source: "/api/:path*",
+        destination: `${apiInterna}/api/:path*`,
+      },
+    ];
+  },
   async headers() {
     return [
       {

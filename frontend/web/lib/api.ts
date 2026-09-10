@@ -1,7 +1,7 @@
 import { getCookie } from "./cookies";
 
-export const API_URL =
-  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000";
+// Siempre se usa el mismo origen; Next.js reenvía /api/* a la API interna.
+export const API_URL = "";
 
 export type EstatusCaso = "Activo" | "Revision" | "Cerrado";
 export type EstatusCita = "Pendiente" | "Confirmada" | "Cancelada";

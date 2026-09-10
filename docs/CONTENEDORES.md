@@ -27,10 +27,10 @@ Si la instalación de SQL Server contiene las herramientas en `/opt/mssql-tools/
 Servicios locales:
 
 - Sitio: `http://localhost:3000`
-- Gateway: `http://localhost:5000`
-- Salud del Gateway: `http://localhost:5000/health`
+- API a través del sitio: `http://localhost:3000/api/*`
+- Salud del conjunto: `http://localhost:3000/health`
 
-La API y SQL Server no publican puertos al host. Los documentos y la base usan volúmenes persistentes llamados `documentos` y `sql-data`.
+La API y SQL Server no publican puertos al host. Next.js reenvía internamente `/api/*` a la API. Los documentos y la base usan volúmenes persistentes llamados `documentos` y `sql-data`.
 
 ## Detener
 

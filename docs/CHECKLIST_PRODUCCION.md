@@ -21,7 +21,7 @@ No guardar secretos reales en GitHub. Configurarlos en el hosting:
 | `Sitio__BaseUrl` | URL pública del sitio |
 | `Smtp__Host`, `Smtp__Port`, `Smtp__User`, `Smtp__Password`, `Smtp__From` | Correo |
 | `Notificaciones__StaffEmail` | Correo que recibe avisos |
-| `NEXT_PUBLIC_API_URL` | URL pública del gateway o API |
+| `API_INTERNAL_URL` | URL privada de la API para el proxy de Next.js |
 | `NEXT_PUBLIC_SITE_URL` | Dominio público usado por SEO |
 
 ## 3. Datos operativos
@@ -38,9 +38,9 @@ No guardar secretos reales en GitHub. Configurarlos en el hosting:
 - [ ] Verificar la restauración de respaldos.
 - [x] Swagger está desactivado por defecto fuera de desarrollo; no activar `Swagger__Enabled` públicamente.
 - [x] La API incluye encabezados defensivos, respuestas de error seguras y `GET /health` para monitoreo.
-- [x] Frontend y Gateway incluyen encabezados defensivos; el Gateway enruta todas las funciones `/api/*` y cuenta con su propia comprobación de salud.
+- [x] El frontend incluye encabezados defensivos y reenvía `/api/*` directamente a la API interna.
 - [x] Dependabot revisa semanalmente las dependencias de npm/NuGet y mensualmente GitHub Actions.
-- [x] Existen imágenes reproducibles para web, API y Gateway, más Compose con volúmenes persistentes; CI valida su configuración.
+- [x] Existen imágenes reproducibles para web y API, más SQL Server y volúmenes persistentes; CI valida Compose.
 
 ## 5. Prueba de aceptación
 

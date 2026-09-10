@@ -32,33 +32,17 @@ services:
       - sql
     restart: unless-stopped
 
-  gateway:
-    build:
-      context: backend
-      dockerfile: Dockerfile.gateway
-    environment:
-      ASPNETCORE_ENVIRONMENT: Production
-      Routes__0__DownstreamHostAndPorts__0__Host: api
-      Routes__0__DownstreamHostAndPorts__0__Port: 5080
-      GlobalConfiguration__BaseUrl: ${ECG_PUBLIC_API_URL:-http://localhost:5000}
-      Cors__AllowedOrigins__0: ${ECG_PUBLIC_SITE_URL:-http://localhost:3000}
-      Security__UseHttpsRedirection: "false"
-    ports:
-      - "5000:5000"
-    depends_on:
-      - api
-    restart: unless-stopped
-
   web:
     build:
       context: frontend/web
       args:
-        NEXT_PUBLIC_API_URL: ${ECG_PUBLIC_API_URL:-http://localhost:5000}
         NEXT_PUBLIC_SITE_URL: ${ECG_PUBLIC_SITE_URL:-http://localhost:3000}
+    environment:
+      API_INTERNAL_URL: http://api:5080
     ports:
       - "3000:3000"
     depends_on:
-      - gateway
+      - api
     restart: unless-stopped
 
 volumes:
