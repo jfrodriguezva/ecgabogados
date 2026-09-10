@@ -37,6 +37,7 @@ No guardar secretos reales en GitHub. Configurarlos en el hosting:
 - [ ] Validar procedimiento ARCO, transferencias y política de retención.
 - [ ] Verificar la restauración de respaldos.
 - [x] Swagger está desactivado por defecto fuera de desarrollo; no activar `Swagger__Enabled` públicamente.
+- [x] La API incluye encabezados defensivos, respuestas de error seguras y `GET /health` para monitoreo.
 
 ## 5. Prueba de aceptación
 

@@ -522,7 +522,7 @@ export default function CasoDetailPage() {
                 Enlace alternativo del expediente
               </h2>
               <p className="mt-2 text-xs leading-relaxed text-brand-creamSoft">
-                Acceso temporal para compartir cuando el cliente todavía no usa su cuenta.
+                Vista temporal de apoyo para el personal autorizado. El acceso ordinario del cliente utiliza correo y contraseña.
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
                 <button onClick={handleCopiarLink} className="border border-brand-gold px-3 py-2 text-[10px] font-semibold uppercase tracking-widest text-brand-gold">

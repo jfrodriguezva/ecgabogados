@@ -60,6 +60,8 @@ Base: `/api`
 
 Swagger UI disponible en `http://localhost:5080/swagger`.
 
+La API publica `GET /health` sin autenticación para las comprobaciones del proveedor de hosting. En producción obliga HTTPS, activa HSTS, agrega encabezados defensivos y oculta los detalles de errores internos.
+
 ## 4.1 Roles y autorización
 
 El JWT incluye el claim de rol (`Administrador` o `Asistente`). Restricciones aplicadas a nivel de controller:

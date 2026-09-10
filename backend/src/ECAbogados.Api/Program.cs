@@ -124,6 +124,23 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHsts();
+    app.UseHttpsRedirection();
+}
+
+// Encabezados defensivos para la API y Swagger. La política de contenido del
+// frontend se administra por separado en Next.js.
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.XContentTypeOptions = "nosniff";
+    context.Response.Headers.XFrameOptions = "DENY";
+    context.Response.Headers.Append("Referrer-Policy", "no-referrer");
+    context.Response.Headers.Append("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+    await next();
+});
+
 // La documentación interactiva se expone en desarrollo. En otro ambiente debe
 // habilitarse deliberadamente con Swagger__Enabled=true.
 if (app.Environment.IsDevelopment() || builder.Configuration.GetValue<bool>("Swagger:Enabled"))
@@ -159,6 +176,34 @@ app.Use(async (context, next) =>
             errors
         });
     }
+    catch (KeyNotFoundException)
+    {
+        context.Response.StatusCode = StatusCodes.Status404NotFound;
+        await context.Response.WriteAsJsonAsync(new
+        {
+            title = "Recurso no encontrado.",
+            status = 404
+        });
+    }
+    catch (UnauthorizedAccessException)
+    {
+        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        await context.Response.WriteAsJsonAsync(new
+        {
+            title = "No fue posible autorizar la solicitud.",
+            status = 401
+        });
+    }
+    catch (Exception ex)
+    {
+        app.Logger.LogError(ex, "Error no controlado al procesar {Method} {Path}", context.Request.Method, context.Request.Path);
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        await context.Response.WriteAsJsonAsync(new
+        {
+            title = "Ocurrió un error interno.",
+            status = 500
+        });
+    }
 });
 
 app.UseRateLimiter();
@@ -167,5 +212,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapGet("/health", () => Results.Ok(new { status = "ok" }))
+    .AllowAnonymous()
+    .ExcludeFromDescription();
 
 app.Run();
