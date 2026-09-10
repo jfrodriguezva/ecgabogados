@@ -124,12 +124,16 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
-// Swagger UI always enabled (not only Development) for easy testing.
-app.UseSwagger();
-app.UseSwaggerUI(options =>
+// La documentación interactiva se expone en desarrollo. En otro ambiente debe
+// habilitarse deliberadamente con Swagger__Enabled=true.
+if (app.Environment.IsDevelopment() || builder.Configuration.GetValue<bool>("Swagger:Enabled"))
 {
-    options.SwaggerEndpoint("/swagger/v1/swagger.json", "ECG Abogados API v1");
-});
+    app.UseSwagger();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "ECG Abogados API v1");
+    });
+}
 
 app.UseCors("Frontend");
 

@@ -28,12 +28,8 @@ basado en Ocelot.
    sqlcmd -S localhost -i database/schema.sql
    ```
 
-   > **Importante**: el script inserta un usuario semilla `erika@ecabogados.mx` con el campo
-   > `PasswordHash` en `<BCRYPT_HASH_PLACEHOLDER>`. Debes reemplazar ese valor por un hash
-   > bcrypt real antes de poder iniciar sesión (el `BcryptPasswordHasher` de la aplicación,
-   > basado en `BCrypt.Net-Next`, genera hashes compatibles). Para desarrollo local puedes
-   > generar el hash de la contraseña `Cambiar123!` con cualquier generador de bcrypt en línea,
-   > o programáticamente con `BCrypt.Net.BCrypt.HashPassword("Cambiar123!")`.
+> **Importante**: el script incluye un administrador de desarrollo. Cambia la contraseña
+> inicial antes de usar datos reales y no cargues los datos de ejemplo en producción.
 
 2. **Compilar la solución**
 
@@ -68,8 +64,16 @@ basado en Ocelot.
 - Email: `erika@ecabogados.mx`
 - Password: la que hayas usado para generar el hash (sugerida en el script: `Cambiar123!`)
 
+## Validación
+
+```
+dotnet test backend/ECAbogados.sln
+```
+
+El repositorio incluye pruebas xUnit y GitHub Actions para validar backend y frontend.
+
 ## Notas
 
-- No se incluyen pruebas unitarias, Docker ni CI: el alcance de este backend es intencionalmente mínimo.
+- No se incluye aún una receta de despliegue porque el proveedor no está definido.
 - Los archivos subidos por `POST /api/documentos` se guardan en
   `src/ECAbogados.Api/App_Data/documentos/{casoId}/{guid}_{nombreArchivo}`.

@@ -34,3 +34,9 @@ ECG Abogados se presenta como despacho jurídico digital en Ecatepec, con atenci
 Next.js 16, React 19, TypeScript, Tailwind CSS, ASP.NET Core 10, SQL Server y Dapper.
 
 El sistema anterior permanece en la carpeta Lawyer y no forma parte de este proyecto.
+
+## Estado
+
+El MVP funcional está implementado. Antes de utilizar datos reales deben completarse el
+hosting, secretos, correo, respaldos, aviso de privacidad y prueba de aceptación indicados
+en [`docs/CHECKLIST_PRODUCCION.md`](docs/CHECKLIST_PRODUCCION.md).
