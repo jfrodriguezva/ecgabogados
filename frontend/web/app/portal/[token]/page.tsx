@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import Monogram from "@/components/Monogram";
 import StatusPill from "@/components/StatusPill";
 import { IconFile, IconUpload } from "@/components/icons";
-import { getCasoPorToken, subirDocumentoPortal, type PortalCaso } from "@/lib/api";
+import { descargarDocumentoPortal, getCasoPorToken, subirDocumentoPortal, type PortalCaso } from "@/lib/api";
 
 function formatBytes(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
@@ -141,10 +141,10 @@ export default function PortalClientePage() {
                 {caso.documentos.map((d) => (
                   <li key={d.id} className="flex items-center gap-3 border border-brand-line px-4 py-3">
                     <IconFile className="h-5 w-5 text-brand-gold" />
-                    <div>
-                      <p className="text-sm text-brand-cream">{d.nombreArchivo}</p>
+                    <button type="button" onClick={() => descargarDocumentoPortal(params.token, d)} className="text-left">
+                      <p className="text-sm text-brand-cream underline decoration-brand-gold/50 underline-offset-4 hover:text-brand-gold">{d.nombreArchivo}</p>
                       <p className="text-xs text-brand-creamSoft">{formatBytes(d.tamanoBytes)}</p>
-                    </div>
+                    </button>
                   </li>
                 ))}
               </ul>

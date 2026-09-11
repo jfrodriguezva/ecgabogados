@@ -463,3 +463,7 @@ export function subirDocumentoPortal(token: string, file: File) {
     body: formData,
   });
 }
+
+export function descargarDocumentoPortal(token: string, documento: Documento) {
+  return descargar(`/api/portal/${token}/documentos/${documento.id}/archivo`, documento.nombreArchivo);
+}

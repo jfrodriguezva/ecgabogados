@@ -1,6 +1,6 @@
 # Evaluación funcional vigente — ECG Abogados
 
-Actualizada el 10 de septiembre de 2026 con base en el código versionado.
+Actualizada el 11 de septiembre de 2026 con base en el código versionado.
 
 ## Estado del producto
 
@@ -28,18 +28,17 @@ ECG Abogados es un MVP funcional a la medida de un despacho unipersonal. Integra
 
 ## Pendientes antes de uso público
 
-- Elegir hosting, dominio y almacenamiento persistente.
-- Configurar SQL Server, secretos, SMTP, HTTPS, CORS y respaldos.
-- Completar y revisar jurídicamente el aviso de privacidad.
-- Cargar información operativa real y ejecutar pruebas de aceptación con la licenciada.
-- Auditar accesibilidad y reforzar observabilidad y recuperación ante desastres.
+- Elegir hosting y dominio; Azure y SMTP se mantienen fuera de esta entrega.
+- Configurar el SQL Server del proveedor, secretos, HTTPS, CORS y respaldos.
+- Confirmar horarios y domicilio del responsable, y revisar jurídicamente el aviso de privacidad.
+- Cargar tarifas reales y ejecutar la aceptación final con la licenciada.
 
 ## Limitaciones conocidas
 
-- Los documentos se guardan en disco local; el hosting debe proporcionar volumen persistente o almacenamiento de objetos.
+- Los documentos se guardan en SQL con límite de 5 MB por archivo; debe vigilarse la capacidad total y la política de conservación.
 - No hay firma electrónica, facturación fiscal, control de horas ni sincronización con calendarios externos.
 - WhatsApp es manual; no existe integración con WhatsApp Business API.
-- La cobertura automatizada es representativa, no exhaustiva; faltan pruebas de integración y navegador.
+- La cobertura automatizada es representativa, no exhaustiva; la aceptación completa requiere datos y participación de la licenciada.
 - Está diseñado para ECG Abogados, no como plataforma multiempresa.
 
 ## Veredicto

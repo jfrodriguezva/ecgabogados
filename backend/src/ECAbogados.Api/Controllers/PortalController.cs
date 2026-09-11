@@ -2,6 +2,7 @@ using ECAbogados.Application.Casos.Queries.ObtenerCasoPorToken;
 using ECAbogados.Application.Documentos;
 using ECAbogados.Application.Documentos.Commands.SubirDocumento;
 using ECAbogados.Application.Documentos.Queries.ListarDocumentosPorCaso;
+using ECAbogados.Application.Interfaces;
 using ECAbogados.Application.Mediation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,9 +18,10 @@ namespace ECAbogados.Api.Controllers;
 [EnableRateLimiting("public")]
 [ApiController]
 [Route("api/[controller]")]
-public class PortalController(ISender sender) : ControllerBase
+public class PortalController(ISender sender, IDocumentoRepository documentos) : ControllerBase
 {
     [HttpGet("{token}")]
+    [AllowAnonymous]
     public async Task<IActionResult> ObtenerCaso(string token)
     {
         var caso = await sender.Send(new ObtenerCasoPorTokenQuery(token));
@@ -27,6 +29,7 @@ public class PortalController(ISender sender) : ControllerBase
     }
 
     [HttpPost("{token}/documentos")]
+    [AllowAnonymous]
     [RequestSizeLimit(TiposPermitidos.TamanoMaximoBytes)]
     public async Task<IActionResult> SubirDocumento(string token, [FromForm] SubirDocumentoPortalRequest request)
     {
@@ -63,6 +66,20 @@ public class PortalController(ISender sender) : ControllerBase
             stream.ToArray()));
 
         return Created(string.Empty, new { id });
+    }
+
+    [HttpGet("{token}/documentos/{documentoId:int}/archivo")]
+    [AllowAnonymous]
+    public async Task<IActionResult> DescargarDocumento(string token, int documentoId)
+    {
+        var caso = await sender.Send(new ObtenerCasoPorTokenQuery(token));
+        if (caso is null) return NotFound();
+
+        var documento = await documentos.GetByIdAsync(documentoId);
+        if (documento is null || documento.CasoId != caso.Id || documento.Contenido is null)
+            return NotFound();
+
+        return File(documento.Contenido, documento.TipoContenido ?? "application/octet-stream", documento.NombreArchivo, enableRangeProcessing: true);
     }
 }
 
