@@ -17,7 +17,7 @@ namespace ECAbogados.Api.Controllers;
 [EnableRateLimiting("public")]
 [ApiController]
 [Route("api/[controller]")]
-public class PortalController(ISender sender, IWebHostEnvironment environment) : ControllerBase
+public class PortalController(ISender sender) : ControllerBase
 {
     [HttpGet("{token}")]
     public async Task<IActionResult> ObtenerCaso(string token)
@@ -27,7 +27,7 @@ public class PortalController(ISender sender, IWebHostEnvironment environment) :
     }
 
     [HttpPost("{token}/documentos")]
-    [RequestSizeLimit(50_000_000)]
+    [RequestSizeLimit(TiposPermitidos.TamanoMaximoBytes)]
     public async Task<IActionResult> SubirDocumento(string token, [FromForm] SubirDocumentoPortalRequest request)
     {
         var caso = await sender.Send(new ObtenerCasoPorTokenQuery(token));
@@ -49,29 +49,18 @@ public class PortalController(ISender sender, IWebHostEnvironment environment) :
 
         if (file.Length > TiposPermitidos.TamanoMaximoBytes)
         {
-            return BadRequest(new { message = "El archivo excede el tamaño máximo permitido (50 MB)." });
+            return BadRequest(new { message = "El archivo excede el tamaño máximo permitido (5 MB)." });
         }
 
-        var contentRoot = environment.ContentRootPath;
-        var carpetaCaso = Path.Combine(contentRoot, "App_Data", "documentos", caso.Id.ToString());
-        Directory.CreateDirectory(carpetaCaso);
-
-        var nombreUnico = $"{Guid.NewGuid()}_{Path.GetFileName(file.FileName)}";
-        var rutaCompleta = Path.Combine(carpetaCaso, nombreUnico);
-
-        await using (var stream = new FileStream(rutaCompleta, FileMode.Create))
-        {
-            await file.CopyToAsync(stream);
-        }
-
-        var rutaRelativa = Path.Combine("App_Data", "documentos", caso.Id.ToString(), nombreUnico);
+        await using var stream = new MemoryStream();
+        await file.CopyToAsync(stream);
 
         var id = await sender.Send(new SubirDocumentoCommand(
             caso.Id,
             file.FileName,
             file.ContentType,
             file.Length,
-            rutaRelativa));
+            stream.ToArray()));
 
         return Created(string.Empty, new { id });
     }

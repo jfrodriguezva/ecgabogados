@@ -15,8 +15,7 @@ public class MiPortalController(
     IChecklistItemRepository checklist,
     IDocumentoRepository documentos,
     IPlazoRepository plazos,
-    IPagoRepository pagos,
-    IWebHostEnvironment environment) : ControllerBase
+    IPagoRepository pagos) : ControllerBase
 {
     [HttpGet("casos")]
     public async Task<IActionResult> MisCasos()
@@ -51,7 +50,7 @@ public class MiPortalController(
     }
 
     [HttpPost("casos/{casoId:int}/documentos")]
-    [RequestSizeLimit(50_000_000)]
+    [RequestSizeLimit(TiposPermitidos.TamanoMaximoBytes)]
     public async Task<IActionResult> SubirDocumento(int casoId, IFormFile file)
     {
         if (currentUser.UsuarioId is not int usuarioId) return Unauthorized();
@@ -59,12 +58,8 @@ public class MiPortalController(
         if (caso?.ClienteUsuarioId != usuarioId) return Forbid();
         if (file.Length == 0 || file.Length > TiposPermitidos.TamanoMaximoBytes || !TiposPermitidos.EsExtensionPermitida(file.FileName))
             return BadRequest(new { message = "Archivo vacío, demasiado grande o de un tipo no permitido." });
-        var carpeta = Path.Combine(environment.ContentRootPath, "App_Data", "documentos", casoId.ToString());
-        Directory.CreateDirectory(carpeta);
-        var nombre = $"{Guid.NewGuid()}_{Path.GetFileName(file.FileName)}";
-        var ruta = Path.Combine(carpeta, nombre);
-        await using (var stream = new FileStream(ruta, FileMode.CreateNew))
-            await file.CopyToAsync(stream);
+        await using var stream = new MemoryStream();
+        await file.CopyToAsync(stream);
         var id = await documentos.CreateAsync(new Documento
         {
             CasoId = casoId,
@@ -72,7 +67,8 @@ public class MiPortalController(
             TipoContenido = file.ContentType,
             TamanoBytes = file.Length,
             FechaCarga = DateTime.UtcNow,
-            RutaAlmacenamiento = Path.Combine("App_Data", "documentos", casoId.ToString(), nombre)
+            RutaAlmacenamiento = "database",
+            Contenido = stream.ToArray()
         });
         return Created(string.Empty, new { id });
     }
@@ -86,9 +82,7 @@ public class MiPortalController(
         var documento = await documentos.GetByIdAsync(documentoId);
         if (documento is null || documento.CasoId != casoId) return NotFound();
 
-        var raiz = Path.GetFullPath(environment.ContentRootPath) + Path.DirectorySeparatorChar;
-        var ruta = Path.GetFullPath(Path.Combine(environment.ContentRootPath, documento.RutaAlmacenamiento));
-        if (!ruta.StartsWith(raiz, StringComparison.OrdinalIgnoreCase) || !System.IO.File.Exists(ruta)) return NotFound();
-        return PhysicalFile(ruta, documento.TipoContenido ?? "application/octet-stream", documento.NombreArchivo, enableRangeProcessing: true);
+        if (documento.Contenido is null) return NotFound();
+        return File(documento.Contenido, documento.TipoContenido ?? "application/octet-stream", documento.NombreArchivo, enableRangeProcessing: true);
     }
 }

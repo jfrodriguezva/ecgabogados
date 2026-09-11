@@ -74,8 +74,15 @@ BEGIN
         TipoContenido NVARCHAR(150) NOT NULL,
         TamanoBytes BIGINT NOT NULL,
         FechaCarga DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
-        RutaAlmacenamiento NVARCHAR(500) NOT NULL
+        RutaAlmacenamiento NVARCHAR(500) NOT NULL DEFAULT N'database',
+        Contenido VARBINARY(MAX) NULL
     );
+END
+GO
+
+IF COL_LENGTH(N'dbo.Documentos', N'Contenido') IS NULL
+BEGIN
+    ALTER TABLE dbo.Documentos ADD Contenido VARBINARY(MAX) NULL;
 END
 GO
 

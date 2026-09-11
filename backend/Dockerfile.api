@@ -9,5 +9,4 @@ WORKDIR /app
 ENV ASPNETCORE_URLS=http://+:5080
 EXPOSE 5080
 COPY --from=build /app/publish .
-RUN mkdir -p /app/App_Data/documentos
 ENTRYPOINT ["dotnet", "ECAbogados.Api.dll"]

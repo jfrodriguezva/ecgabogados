@@ -36,8 +36,6 @@ public static class DependencyInjection
         services.AddSingleton<IEmailSender, SmtpEmailSender>();
         services.AddScoped<IStaffNotifier, StaffNotifier>();
         services.AddScoped<IPasswordResetNotifier, PasswordResetNotifier>();
-        services.AddHostedService<RecordatorioBackgroundService>();
-
         return services;
     }
 }

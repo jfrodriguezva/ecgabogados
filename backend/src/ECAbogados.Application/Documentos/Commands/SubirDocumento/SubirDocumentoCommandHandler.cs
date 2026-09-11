@@ -18,7 +18,8 @@ public class SubirDocumentoCommandHandler(
             TipoContenido = request.TipoContenido,
             TamanoBytes = request.TamanoBytes,
             FechaCarga = DateTime.UtcNow,
-            RutaAlmacenamiento = request.RutaAlmacenamiento
+            RutaAlmacenamiento = "database",
+            Contenido = request.Contenido
         };
 
         var id = await documentoRepository.CreateAsync(documento);

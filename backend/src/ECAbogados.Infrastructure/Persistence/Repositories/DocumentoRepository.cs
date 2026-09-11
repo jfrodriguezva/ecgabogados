@@ -12,7 +12,7 @@ public class DocumentoRepository(SqlConnectionFactory connectionFactory) : IDocu
         {
             using var connection = await connectionFactory.CreateOpenConnectionAsync();
             const string sql = """
-                SELECT Id, CasoId, NombreArchivo, TipoContenido, TamanoBytes, FechaCarga, RutaAlmacenamiento
+                SELECT Id, CasoId, NombreArchivo, TipoContenido, TamanoBytes, FechaCarga, RutaAlmacenamiento, Contenido
                 FROM dbo.Documentos
                 WHERE Id = @Id
                 """;
@@ -45,9 +45,9 @@ public class DocumentoRepository(SqlConnectionFactory connectionFactory) : IDocu
             using var connection = await connectionFactory.CreateOpenConnectionAsync();
 
             const string sql = """
-                INSERT INTO dbo.Documentos (CasoId, NombreArchivo, TipoContenido, TamanoBytes, FechaCarga, RutaAlmacenamiento)
+                INSERT INTO dbo.Documentos (CasoId, NombreArchivo, TipoContenido, TamanoBytes, FechaCarga, RutaAlmacenamiento, Contenido)
                 OUTPUT INSERTED.Id
-                VALUES (@CasoId, @NombreArchivo, @TipoContenido, @TamanoBytes, @FechaCarga, @RutaAlmacenamiento)
+                VALUES (@CasoId, @NombreArchivo, @TipoContenido, @TamanoBytes, @FechaCarga, @RutaAlmacenamiento, @Contenido)
                 """;
 
             return await connection.ExecuteScalarAsync<int>(sql, documento);

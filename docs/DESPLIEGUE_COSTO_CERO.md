@@ -72,6 +72,6 @@ facturable antes de ejecutarse la acción.
 
 El sitio público, solicitudes de cita, usuarios, expedientes, etapas, tarifas, control
 manual de pagos y conversaciones pueden conservarse mientras el consumo permanezca
-dentro de las cuotas. Los documentos requieren almacenamiento durable: para el piloto
-deben limitarse o migrarse a la base gratuita; el disco local de Container Apps no es
-un repositorio permanente.
+dentro de las cuotas. Los documentos se almacenan en Azure SQL y tienen un límite de
+5 MB por archivo para proteger los 32 GB gratuitos. También debe vigilarse el consumo
+total y depurarse únicamente conforme a una política jurídica de conservación.

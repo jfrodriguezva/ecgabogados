@@ -12,6 +12,8 @@ public class SubirDocumentoCommandValidator : AbstractValidator<SubirDocumentoCo
             .WithMessage($"Tipo de archivo no permitido. Extensiones válidas: {TiposPermitidos.ExtensionesPermitidasTexto}.");
         RuleFor(x => x.TipoContenido).NotEmpty().MaximumLength(150);
         RuleFor(x => x.TamanoBytes).GreaterThan(0).LessThanOrEqualTo(TiposPermitidos.TamanoMaximoBytes);
-        RuleFor(x => x.RutaAlmacenamiento).NotEmpty().MaximumLength(500);
+        RuleFor(x => x.Contenido).NotNull().Must((command, contenido) =>
+                contenido.LongLength == command.TamanoBytes && contenido.LongLength <= TiposPermitidos.TamanoMaximoBytes)
+            .WithMessage("El contenido no coincide con el tamaño declarado o excede el límite permitido.");
     }
 }

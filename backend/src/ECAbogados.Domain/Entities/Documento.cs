@@ -9,4 +9,5 @@ public class Documento
     public long TamanoBytes { get; set; }
     public DateTime FechaCarga { get; set; }
     public string RutaAlmacenamiento { get; set; } = string.Empty;
+    public byte[]? Contenido { get; set; }
 }

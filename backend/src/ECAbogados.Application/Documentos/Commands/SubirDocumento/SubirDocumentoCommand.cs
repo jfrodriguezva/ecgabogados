@@ -7,4 +7,4 @@ public record SubirDocumentoCommand(
     string NombreArchivo,
     string TipoContenido,
     long TamanoBytes,
-    string RutaAlmacenamiento) : IRequest<int>;
+    byte[] Contenido) : IRequest<int>;

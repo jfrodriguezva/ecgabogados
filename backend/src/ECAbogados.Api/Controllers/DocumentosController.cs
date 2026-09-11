@@ -11,16 +11,15 @@ namespace ECAbogados.Api.Controllers;
 [Authorize(Roles = "Administrador,Abogado,Asistente")]
 [ApiController]
 [Route("api/[controller]")]
-public class DocumentosController(ISender sender, IDocumentoRepository documentos, IWebHostEnvironment environment) : ControllerBase
+public class DocumentosController(ISender sender, IDocumentoRepository documentos) : ControllerBase
 {
     [HttpGet("{id:int}/archivo")]
     public async Task<IActionResult> Descargar(int id)
     {
         var documento = await documentos.GetByIdAsync(id);
         if (documento is null) return NotFound();
-        var ruta = RutaDocumentoSegura(documento.RutaAlmacenamiento);
-        if (ruta is null || !System.IO.File.Exists(ruta)) return NotFound();
-        return PhysicalFile(ruta, documento.TipoContenido ?? "application/octet-stream", documento.NombreArchivo, enableRangeProcessing: true);
+        if (documento.Contenido is null) return NotFound();
+        return File(documento.Contenido, documento.TipoContenido ?? "application/octet-stream", documento.NombreArchivo, enableRangeProcessing: true);
     }
 
     [HttpGet("caso/{casoId:int}")]
@@ -31,7 +30,7 @@ public class DocumentosController(ISender sender, IDocumentoRepository documento
     }
 
     [HttpPost]
-    [RequestSizeLimit(50_000_000)]
+    [RequestSizeLimit(TiposPermitidos.TamanoMaximoBytes)]
     public async Task<IActionResult> Subir([FromForm] SubirDocumentoRequest request)
     {
         var casoId = request.CasoId;
@@ -49,41 +48,24 @@ public class DocumentosController(ISender sender, IDocumentoRepository documento
 
         if (file.Length > TiposPermitidos.TamanoMaximoBytes)
         {
-            return BadRequest(new { message = "El archivo excede el tamaño máximo permitido (50 MB)." });
+            return BadRequest(new { message = "El archivo excede el tamaño máximo permitido (5 MB)." });
         }
 
-        var contentRoot = environment.ContentRootPath;
-        var carpetaCaso = Path.Combine(contentRoot, "App_Data", "documentos", casoId.ToString());
-        Directory.CreateDirectory(carpetaCaso);
-
-        var nombreUnico = $"{Guid.NewGuid()}_{Path.GetFileName(file.FileName)}";
-        var rutaCompleta = Path.Combine(carpetaCaso, nombreUnico);
-
-        await using (var stream = new FileStream(rutaCompleta, FileMode.Create))
-        {
-            await file.CopyToAsync(stream);
-        }
-
-        var rutaRelativa = Path.Combine("App_Data", "documentos", casoId.ToString(), nombreUnico);
+        await using var stream = new MemoryStream();
+        await file.CopyToAsync(stream);
 
         var command = new SubirDocumentoCommand(
             casoId,
             file.FileName,
             file.ContentType,
             file.Length,
-            rutaRelativa);
+            stream.ToArray());
 
         var id = await sender.Send(command);
 
         return CreatedAtAction(nameof(ListarPorCaso), new { casoId }, new { id });
     }
 
-    private string? RutaDocumentoSegura(string rutaRelativa)
-    {
-        var raiz = Path.GetFullPath(environment.ContentRootPath) + Path.DirectorySeparatorChar;
-        var ruta = Path.GetFullPath(Path.Combine(environment.ContentRootPath, rutaRelativa));
-        return ruta.StartsWith(raiz, StringComparison.OrdinalIgnoreCase) ? ruta : null;
-    }
 }
 
 public class SubirDocumentoRequest

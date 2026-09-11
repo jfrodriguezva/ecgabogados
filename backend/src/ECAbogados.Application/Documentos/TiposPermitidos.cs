@@ -2,7 +2,7 @@ namespace ECAbogados.Application.Documentos;
 
 public static class TiposPermitidos
 {
-    public const long TamanoMaximoBytes = 50_000_000; // 50 MB, igual al límite del request
+    public const long TamanoMaximoBytes = 5_000_000; // Protege la cuota de Azure SQL Free.
 
     private static readonly HashSet<string> Extensiones = new(StringComparer.OrdinalIgnoreCase)
     {

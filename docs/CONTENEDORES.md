@@ -30,7 +30,9 @@ Servicios locales:
 - API a través del sitio: `http://localhost:3000/api/*`
 - Salud del conjunto: `http://localhost:3000/health`
 
-La API y SQL Server no publican puertos al host. Next.js reenvía internamente `/api/*` a la API. Los documentos y la base usan volúmenes persistentes llamados `documentos` y `sql-data`.
+La API y SQL Server no publican puertos al host. Next.js reenvía internamente `/api/*`
+a la API. La base usa el volumen persistente `sql-data`; los documentos nuevos se
+guardan dentro de SQL para conservarlos también en plataformas sin disco persistente.
 
 ## Detener
 
