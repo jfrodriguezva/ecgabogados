@@ -1,15 +1,6 @@
 -- ECG Abogados - esquema de base de datos SQL Server
--- Ejecutar contra una base de datos vacía llamada ECAbogados (o la que se configure
--- en ConnectionStrings:Default de backend/src/ECAbogados.Api/appsettings.json).
-
-IF NOT EXISTS (SELECT 1 FROM sys.databases WHERE name = N'ECGAbogados')
-BEGIN
-    CREATE DATABASE ECGAbogados;
-END
-GO
-
-USE ECGAbogados;
-GO
+-- La aplicación crea la base indicada en ConnectionStrings:Default y ejecuta este
+-- esquema dentro de ella cuando Database:Initialize está habilitado.
 
 -- =========================================================
 -- Tabla: Usuarios

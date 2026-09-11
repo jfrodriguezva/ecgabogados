@@ -130,9 +130,8 @@ var app = builder.Build();
 if (builder.Configuration.GetValue<bool>("Database:Initialize"))
 {
     await using var scope = app.Services.CreateAsyncScope();
-    var connectionFactory = scope.ServiceProvider.GetRequiredService<SqlConnectionFactory>();
     var schemaPath = Path.Combine(AppContext.BaseDirectory, "database", "schema.sql");
-    await DatabaseInitializer.InitializeAsync(connectionFactory, schemaPath);
+    await DatabaseInitializer.InitializeAsync(builder.Configuration, schemaPath);
 
     var usuarios = scope.ServiceProvider.GetRequiredService<IUsuarioRepository>();
     if ((await usuarios.GetAllAsync()).Count == 0)

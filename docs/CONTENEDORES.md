@@ -14,20 +14,12 @@ Esta receta permite probar el conjunto completo sin comprometerse con un proveed
 docker compose --env-file .env.container up -d --build
 ```
 
-## Inicializar la base
+## Inicialización automática
 
-Esperar a que SQL Server termine de iniciar y ejecutar el esquema una sola vez:
-
-```bash
-docker compose --env-file .env.container cp backend/database/schema.sql sql:/tmp/schema.sql
-docker compose --env-file .env.container exec sql /bin/bash -c '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -i /tmp/schema.sql'
-```
-
-Si la instalación de SQL Server contiene las herramientas en `/opt/mssql-tools/bin`, usar esa ruta en el segundo comando.
-
-Después de aplicar el esquema, la API se recupera automáticamente y crea la primera
-administradora con las variables `ECG_ADMIN_*`, únicamente si la tabla de usuarios está
-vacía. No es necesario insertar un hash o una contraseña de demostración.
+No es necesario ejecutar comandos dentro de SQL Server. La API espera a que SQL esté
+disponible mediante su política de reinicio, crea la base configurada, aplica el esquema
+idempotente y crea la primera administradora con las variables `ECG_ADMIN_*` cuando la
+tabla de usuarios está vacía.
 
 Servicios locales:
 
