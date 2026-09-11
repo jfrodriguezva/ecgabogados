@@ -10,7 +10,7 @@ namespace ECAbogados.Infrastructure.Notifications;
 /// Envío de correo vía SMTP estándar (System.Net.Mail, incluido en .NET, sin costo ni
 /// paquetes adicionales). Compatible con cualquier proveedor gratuito (Gmail con
 /// "contraseña de aplicación", Brevo free tier, etc.). Si no hay Smtp:Host configurado,
-/// solo registra el mensaje en el log (modo desarrollo sin credenciales).
+/// omite el envío sin registrar el cuerpo: algunos mensajes contienen enlaces o tokens.
 /// </summary>
 public class SmtpEmailSender(IConfiguration configuration, ILogger<SmtpEmailSender> logger) : IEmailSender
 {
@@ -25,7 +25,10 @@ public class SmtpEmailSender(IConfiguration configuration, ILogger<SmtpEmailSend
 
         if (string.IsNullOrWhiteSpace(host))
         {
-            logger.LogInformation("[Correo simulado] Para: {To} | Asunto: {Subject} | {Body}", to, subject, body);
+            logger.LogInformation(
+                "Correo omitido porque SMTP no está configurado. Destinatario: {To}; asunto: {Subject}.",
+                to,
+                subject);
             return;
         }
 

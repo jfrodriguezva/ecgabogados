@@ -1,5 +1,4 @@
 using ECAbogados.Application.Casos.Queries.ListarCasos;
-using ECAbogados.Application.Auth.Commands.SolicitarResetPassword;
 using ECAbogados.Application.Interfaces;
 using ECAbogados.Application.Mediation;
 using ECAbogados.Application.Usuarios.Commands.CrearUsuario;
@@ -28,7 +27,6 @@ public class ClientesController(ISender sender, ICasoRepository casos) : Control
         if (caso is null) return BadRequest(new { message = "El expediente no existe." });
         var id = await sender.Send(new CrearUsuarioCommand(request.Email, request.PasswordTemporal, request.Nombre, "Cliente"));
         await casos.AsignarClienteYEtapaAsync(request.CasoId, id, "Integración documental");
-        await sender.Send(new SolicitarResetPasswordCommand(request.Email));
         return Created(string.Empty, new { id });
     }
 }
