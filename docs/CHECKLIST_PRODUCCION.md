@@ -22,8 +22,6 @@ No guardar secretos reales en GitHub. Configurarlos en el hosting:
 | `Jwt__Secret` | Firma de sesiones; usar un valor aleatorio largo |
 | `Cors__AllowedOrigins__0` | Dominio público del frontend |
 | `Sitio__BaseUrl` | URL pública del sitio |
-| `Smtp__Host`, `Smtp__Port`, `Smtp__User`, `Smtp__Password`, `Smtp__From` | Correo |
-| `Notificaciones__StaffEmail` | Correo que recibe avisos |
 | `API_INTERNAL_URL` | URL privada de la API para el proxy de Next.js |
 | `NEXT_PUBLIC_SITE_URL` | Dominio público usado por SEO |
 
@@ -65,6 +63,7 @@ aprobadas. Los recorridos siguientes requieren un ambiente con SQL y validación
 
 ## 6. Fuera del alcance inicial
 
+- Azure y SMTP.
 - Cobros electrónicos y dirección física permanente.
 - Automatización de WhatsApp.
 - Operación de Comercializadora, conservada como “Próximamente”.

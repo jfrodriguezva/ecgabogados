@@ -2,6 +2,9 @@
 
 Nueva plataforma independiente para la Lic. Erika Cruz García.
 
+> Alcance vigente: aplicación local/portable en Docker. Azure y SMTP están aplazados y
+> no se consideran pendientes de esta entrega.
+
 ## Alcance
 
 - Sitio público de captación con foco en divorcio incausado.
@@ -44,8 +47,8 @@ en [`docs/CHECKLIST_PRODUCCION.md`](docs/CHECKLIST_PRODUCCION.md).
 Para levantar un ambiente reproducible con contenedores, consultar
 [`docs/CONTENEDORES.md`](docs/CONTENEDORES.md).
 
-La alternativa inicial de tres servicios y costo mínimo está documentada en
+La alternativa portable de tres servicios y costo mínimo está documentada en
 [`docs/ARQUITECTURA_ECONOMICA.md`](docs/ARQUITECTURA_ECONOMICA.md).
 
-La publicación gratuita de imágenes y los controles para evitar cargos accidentales
-en Azure están documentados en [`docs/DESPLIEGUE_COSTO_CERO.md`](docs/DESPLIEGUE_COSTO_CERO.md).
+La investigación de Azure se conserva únicamente como referencia aplazada en
+[`docs/DESPLIEGUE_COSTO_CERO.md`](docs/DESPLIEGUE_COSTO_CERO.md).

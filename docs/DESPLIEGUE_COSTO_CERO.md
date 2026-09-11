@@ -1,5 +1,7 @@
 # Despliegue piloto con objetivo de costo cero
 
+> Referencia aplazada: Azure no forma parte del alcance vigente del proyecto.
+
 ## Alcance y límite de la garantía
 
 Azure Container Apps es un servicio de consumo: sus cuotas gratuitas reducen el costo,

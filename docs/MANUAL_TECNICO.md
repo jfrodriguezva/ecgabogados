@@ -201,6 +201,8 @@ CORS permite `http://localhost:3000` para desarrollo directo, aunque el flujo no
 
 ## 8. Limitaciones técnicas conocidas
 
-- Almacenamiento de documentos en disco local del servidor de la API — no apto para múltiples instancias sin un volumen persistente compartido (relevante al planear el despliegue a Azure: considerar Blob Storage).
+- Almacenamiento de documentos en SQL con máximo de 5 MB por archivo, independiente
+  del disco local. Debe vigilarse el tamaño total de la base y aplicarse una política de
+  conservación antes de alcanzar la capacidad del proveedor.
 - Cobertura de pruebas automatizadas es representativa, no exhaustiva (ver 4.7).
 - El historial de auditoría cubre el ciclo de vida del caso (creación, estatus, checklist, citas ligadas, documentos, pagos, portal) — no absolutamente todas las mutaciones del sistema (ej. marcar un mensaje de contacto como atendido no se audita).
