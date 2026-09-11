@@ -6,7 +6,8 @@ Esta receta permite probar el conjunto completo sin comprometerse con un proveed
 
 1. Instalar Docker Desktop o Docker Engine con Compose.
 2. Copiar `.env.container.example` como `.env.container`.
-3. Reemplazar `ECG_SQL_PASSWORD` y `ECG_JWT_SECRET` por valores fuertes.
+3. Reemplazar `ECG_SQL_PASSWORD`, `ECG_JWT_SECRET` y `ECG_ADMIN_PASSWORD` por valores
+   fuertes. Confirmar también `ECG_ADMIN_EMAIL` y `ECG_ADMIN_NAME`.
 4. Construir e iniciar:
 
 ```bash
@@ -23,6 +24,10 @@ docker compose --env-file .env.container exec sql /bin/bash -c '/opt/mssql-tools
 ```
 
 Si la instalación de SQL Server contiene las herramientas en `/opt/mssql-tools/bin`, usar esa ruta en el segundo comando.
+
+Después de aplicar el esquema, la API se recupera automáticamente y crea la primera
+administradora con las variables `ECG_ADMIN_*`, únicamente si la tabla de usuarios está
+vacía. No es necesario insertar un hash o una contraseña de demostración.
 
 Servicios locales:
 

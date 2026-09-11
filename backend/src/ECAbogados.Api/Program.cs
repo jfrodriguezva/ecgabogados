@@ -67,7 +67,7 @@ builder.Services.AddRateLimiter(options =>
 
 // JWT Authentication
 var jwtSecret = builder.Configuration["Jwt:Secret"];
-if (string.IsNullOrWhiteSpace(jwtSecret))
+if (string.IsNullOrWhiteSpace(jwtSecret) || jwtSecret.Length < 32 || jwtSecret.StartsWith("CAMBIAR-", StringComparison.OrdinalIgnoreCase))
 {
     throw new InvalidOperationException(
         "No se encontró 'Jwt:Secret'. Configúralo con 'dotnet user-secrets set \"Jwt:Secret\" \"<valor>\"' " +
@@ -139,7 +139,8 @@ if (builder.Configuration.GetValue<bool>("Database:Initialize"))
     {
         var email = builder.Configuration["BootstrapAdmin:Email"];
         var password = builder.Configuration["BootstrapAdmin:Password"];
-        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password) || password.Length < 12)
+        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password) || password.Length < 12 ||
+            password.StartsWith("CAMBIAR-", StringComparison.OrdinalIgnoreCase))
             throw new InvalidOperationException("Para inicializar producción define BootstrapAdmin__Email y una BootstrapAdmin__Password de al menos 12 caracteres.");
 
         var hasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();

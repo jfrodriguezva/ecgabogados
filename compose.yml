@@ -17,6 +17,10 @@ services:
       ASPNETCORE_ENVIRONMENT: Production
       ConnectionStrings__Default: Server=sql,1433;Database=ECGAbogados;User Id=sa;Password=${ECG_SQL_PASSWORD};Encrypt=True;TrustServerCertificate=True
       Jwt__Secret: ${ECG_JWT_SECRET:?Define ECG_JWT_SECRET en .env.container}
+      Database__Initialize: "true"
+      BootstrapAdmin__Email: ${ECG_ADMIN_EMAIL:?Define ECG_ADMIN_EMAIL en .env.container}
+      BootstrapAdmin__Password: ${ECG_ADMIN_PASSWORD:?Define ECG_ADMIN_PASSWORD en .env.container}
+      BootstrapAdmin__Nombre: ${ECG_ADMIN_NAME:-Erika Cruz García}
       Cors__AllowedOrigins__0: ${ECG_PUBLIC_SITE_URL:-http://localhost:3000}
       Sitio__BaseUrl: ${ECG_PUBLIC_SITE_URL:-http://localhost:3000}
       Security__UseHttpsRedirection: "false"
