@@ -1,5 +1,8 @@
 # Arquitectura inicial de costo mínimo
 
+> Este documento describe la ejecución completa en un VPS. Para el piloto en las
+> capas gratuitas de Azure, consultar `DESPLIEGUE_COSTO_CERO.md`.
+
 ## Componentes
 
 Solo se mantienen tres servicios Docker:
