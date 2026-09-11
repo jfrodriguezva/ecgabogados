@@ -55,6 +55,21 @@ mantener credenciales de registro. Ningún secreto debe incluirse en las imágen
 5. Revisar semanalmente Cost Analysis y las cuotas durante el piloto.
 6. Usar etiquetas SHA para poder regresar a una versión anterior sin reconstruir.
 
+## Inicialización segura
+
+La imagen de la API incluye `database/schema.sql`. En la primera revisión de Container
+Apps deben configurarse estas variables:
+
+- `Database__Initialize=true`
+- `BootstrapAdmin__Email`: correo real de la licenciada
+- `BootstrapAdmin__Password`: secreto de al menos 12 caracteres
+- `BootstrapAdmin__Nombre=Erika Cruz García`
+
+La API crea o actualiza las tablas idempotentemente y solamente crea la administradora
+cuando la tabla de usuarios está vacía. Después del primer arranque puede eliminarse el
+secreto `BootstrapAdmin__Password` y establecerse `Database__Initialize=false`; no hay
+usuarios, expedientes ni contraseñas de demostración dentro del esquema de producción.
+
 Para un corte automático aproximado se puede crear una automatización que, al recibir
 una alerta, establezca las aplicaciones en cero o las deshabilite. No es garantía
 absoluta: la información de costos puede llegar con retraso y ya podría existir consumo

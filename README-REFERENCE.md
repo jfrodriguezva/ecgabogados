@@ -38,6 +38,7 @@ npm install
 npm run dev
 ```
 
-Credenciales semilla del panel: `erika@ecabogados.mx` / `Cambiar123!`
+El proyecto de referencia ya no define credenciales predeterminadas; el acceso inicial
+debe provisionarse mediante secretos del ambiente.
 
 Ver el detalle completo de configuración, variables de entorno y solución de problemas en [`docs/MANUAL_TECNICO.md`](docs/MANUAL_TECNICO.md).

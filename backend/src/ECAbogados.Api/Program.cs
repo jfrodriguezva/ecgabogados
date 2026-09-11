@@ -1,7 +1,10 @@
 using System.Text;
 using System.Threading.RateLimiting;
 using ECAbogados.Application;
+using ECAbogados.Application.Interfaces;
+using ECAbogados.Domain.Entities;
 using ECAbogados.Infrastructure;
+using ECAbogados.Infrastructure.Persistence;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
@@ -123,6 +126,32 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var app = builder.Build();
+
+if (builder.Configuration.GetValue<bool>("Database:Initialize"))
+{
+    await using var scope = app.Services.CreateAsyncScope();
+    var connectionFactory = scope.ServiceProvider.GetRequiredService<SqlConnectionFactory>();
+    var schemaPath = Path.Combine(AppContext.BaseDirectory, "database", "schema.sql");
+    await DatabaseInitializer.InitializeAsync(connectionFactory, schemaPath);
+
+    var usuarios = scope.ServiceProvider.GetRequiredService<IUsuarioRepository>();
+    if ((await usuarios.GetAllAsync()).Count == 0)
+    {
+        var email = builder.Configuration["BootstrapAdmin:Email"];
+        var password = builder.Configuration["BootstrapAdmin:Password"];
+        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password) || password.Length < 12)
+            throw new InvalidOperationException("Para inicializar producción define BootstrapAdmin__Email y una BootstrapAdmin__Password de al menos 12 caracteres.");
+
+        var hasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
+        await usuarios.CreateAsync(new Usuario
+        {
+            Email = email.Trim().ToLowerInvariant(),
+            Nombre = builder.Configuration["BootstrapAdmin:Nombre"] ?? "Erika Cruz García",
+            PasswordHash = hasher.Hash(password),
+            Rol = "Administrador"
+        });
+    }
+}
 
 if (!app.Environment.IsDevelopment() && builder.Configuration.GetValue("Security:UseHttpsRedirection", true))
 {

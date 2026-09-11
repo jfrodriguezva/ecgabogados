@@ -59,8 +59,9 @@ con arquitectura por capas (Domain / Application / Infrastructure / Api).
 
 ## Login por defecto (una vez reemplazado el hash)
 
-- Email: `erika@ecabogados.mx`
-- Password: la que hayas usado para generar el hash (sugerida en el script: `Cambiar123!`)
+- No hay credenciales predeterminadas. Para la primera ejecución configura
+  `Database__Initialize=true`, `BootstrapAdmin__Email` y
+  `BootstrapAdmin__Password` (mínimo 12 caracteres).
 
 ## Validación
 
